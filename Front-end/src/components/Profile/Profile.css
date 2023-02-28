@@ -1,0 +1,12 @@
+.profile-image-container{
+    width: 100px;
+    box-sizing: border-box;
+}
+.profile-image{
+    width: 100%;
+}
+.Btton-calse{
+    width: 100px;
+    height: 20px;
+    background-color: aliceblue;
+}
