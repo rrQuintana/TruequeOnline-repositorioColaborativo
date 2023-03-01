@@ -59,6 +59,7 @@ function Login() {
     await axios.post("http://localhost:4000/api/usuarios", newUser)
 
     setUsuario({...Usuario});
+    Registrar();
   };
 
   //Crear un usuario
@@ -113,28 +114,6 @@ function Login() {
           : setErrMessage("Correo no registrado");
         console.log(ErrMessage);
       });
-  }
-
-  //Funcion para registrar datos en la base de datos
-  async function RegistrarDatos(
-    NoUsuario,
-    Correo,
-    NombreUsuario,
-    TelefonoUsuario,
-    Contacto
-  ) {
-    try {
-      const docRef = await addDoc(collection(db, "usuarios"), {
-        Usuario: NoUsuario,
-        Nombre: NombreUsuario,
-        Telefono: TelefonoUsuario,
-        Correo: Correo,
-        Contacto: Contacto,
-      });
-    } catch (e) {
-      console.error("Error adding document: ", e);
-      console.log(e.message);
-    }
   }
 
   return (

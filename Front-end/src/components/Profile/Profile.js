@@ -7,6 +7,7 @@ import DefaulUserIcon from "./default-user.png";
 import "./Profile.css";
 import { db } from "../firebase.config";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import axi from "axios";
 
  function Profile() {
   const { isAuthenticated } = useContext(AuthContext); //Saber si el usuario está autenticado
@@ -20,23 +21,16 @@ import { collection, query, where, getDocs } from "firebase/firestore";
   //Función para cargar los datos del usuariop
   useEffect(() => {
     async function CargarDatos(){
-      const campoBuscado = isUser.uid; //Id del usuario
-  
-      //Hacer el querry de sus datos
-      const q = query(
-        collection(db, "usuarios"),
-        where("Usuario", "==", campoBuscado)
-      );
-  
-      //Extraer los datos y almacenarlos en variables de estado
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        setNombreUsuario(doc.data().Nombre);
-        setNoUsuario(doc.data().Usuario);
-        setTelefono(doc.data().Telefono);
-        setCorreo(doc.data().Correo);
-        setContacto(doc.data().Contacto);
-      });
+      
+      const campoBuscado = isUser.email; //Correo del usuario      
+      const res = await axi.get(`http://localhost:4000/api/usuarios/${campoBuscado}`)
+      const InfoUsuario = res.data
+      console.log(InfoUsuario)
+      setNombreUsuario(InfoUsuario.nombre);
+      setNoUsuario(InfoUsuario._id);
+      setTelefono(InfoUsuario.telefono);
+      setCorreo(InfoUsuario.correo);
+      setContacto(InfoUsuario.contacto);
     }
     CargarDatos();
   }, [])

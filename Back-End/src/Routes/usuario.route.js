@@ -14,13 +14,13 @@ router.route('/')
   .get(getUser)
   .post(createUser)
 
-router.route('/comentarios/:id')
-  .get(comentariosPersona)
-
-router.route('/:id')
+router.route('/:email')
   .get(getUsuario)
   .delete(deleteUser)
   .put(updateUser)
+
+router.route('/comentarios/:id')
+  .get(comentariosPersona)
 
 router.route('/publicaciones/:id')
   .get(getUsuarioPublicaciones)
