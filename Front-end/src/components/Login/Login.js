@@ -109,6 +109,9 @@ function Login() {
         setIsAuthenticated(true);
         setUser(user);
         navigate("/");
+
+       
+
       })
       .catch((error) => {
         const errorMessage = error.message;
