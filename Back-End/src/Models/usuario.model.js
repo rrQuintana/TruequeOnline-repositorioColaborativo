@@ -4,11 +4,11 @@ const usuarioSchema = new Schema({
     
     nombre: String,
     apellido: String,
-    foto: String,
-    email: String,
     telefono: Number,
+    email: String,
     direccion: String,
     contacto: String,
+    foto: String,
     calificacion: String,
     reportes: Number,
     

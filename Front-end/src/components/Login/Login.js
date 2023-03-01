@@ -9,51 +9,85 @@ import {
 } from "firebase/auth";
 import { AuthContext } from "../../AuthContext";
 import { db } from "../firebase.config";
-import { collection, addDoc, query, getDocs } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
+import axios from "axios"
 
 function Login() {
-  const [ registro, setRegistro ] = useState(true); //Manejadores de estado para registrar o logear
-  const [ ErrMessage, setErrMessage ] = useState(null); //Manejador de estado para el mensaje de error
+  const [registro, setRegistro] = useState(true); //Manejadores de estado para registrar o logear
+  const [ErrMessage, setErrMessage] = useState(null); //Manejador de estado para el mensaje de error
   const navigate = useNavigate();
 
-  //Data de login con Google
   const auth = getAuth();
   const { setIsAuthenticated } = useContext(AuthContext);
   const { setUser } = useContext(AuthContext);
 
+  const Usuario = {
+    nombre: "",
+    apellido: "",
+    telefono: "",
+    email: "",
+    direccion: "Sin asignar",
+    contacto: "Sin asignar",
+    foto: "",
+    calificacion: 0,
+    reportes: 0,
+  };
+  const [usuario, setUsuario] = useState(Usuario);
+
+  const capturarData = (e) => {
+    const { name, value } = e.target;
+    setUsuario({ ...usuario, [name]: value });
+  };
+
+  const guardarData = async (e) => {
+    e.preventDefault();
+
+    //Crear función post
+    const newUser = {
+      nombre: usuario.nombre,
+      apellido: usuario.apellido,
+      telefono: usuario.telefono,
+      email: usuario.email,
+      direccion: usuario.direccion,
+      contacto: usuario.contacto,
+      foto: usuario.foto,
+      calificacion: usuario.calificacion,
+      reportes: usuario.reportes,
+    }
+    console.log(newUser)
+
+    await axios.post("http://localhost:4000/api/usuarios", newUser)
+
+    setUsuario({...Usuario});
+  };
+
   //Crear un usuario
   function Registrar() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const email = document.getElementById("usuario-email").value;
+    const password = document.getElementById("usuario-password").value;
     const auth = getAuth();
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
 
-        //Guardar datos del usuario para registrarlos en la base de datos
-        const NoUsuario = user.uid;
-        const Correo = email;
-        const NombreUsuario = document.getElementById("NombreUsuario").value;
-        const TelefonoUsuario = document.getElementById("TelefonoUsuario").value;
-        const Contacto = "Sin asignar";
-
-        //Guardar los datos del usuario en la base de datos
-        RegistrarDatos(NoUsuario, Correo, NombreUsuario, TelefonoUsuario, Contacto);
-
         //Alerta de registro exitoso
         window.alert(user.email + " registrado con exito");
 
         //Limpiar los inputs
-        document.getElementById("email").value = "";
-        document.getElementById("password").value = "";
+        document.getElementById("usuario-email").value = "";
+        document.getElementById("usuario-password").value = "";
 
         setRegistro(!registro);
       })
       .catch((error) => {
         const errorMessage = error.message;
-        window.alert("Error en el registro", errorMessage);
-        console.error("Error en el registro", errorMessage);
+        errorMessage ===
+        "Firebase: Password should be at least 6 characters (auth/weak-password)."
+          ? setErrMessage("La contraseña tiene que ser mayor a 6 caracteres")
+          : errorMessage === "Firebase: Error (auth/email-already-in-use)."
+          ? setErrMessage("Correo en uso")
+          : setErrMessage("Datos mal ingresados");
       });
   }
 
@@ -74,13 +108,21 @@ function Login() {
       .catch((error) => {
         const errorMessage = error.message;
         console.error("Error en Login", errorMessage);
-        errorMessage === "Firebase: Error (auth/wrong-password)." ? setErrMessage("Contraseña incorrecta") : setErrMessage("Correo no registrado")
+        errorMessage === "Firebase: Error (auth/wrong-password)."
+          ? setErrMessage("Contraseña incorrecta")
+          : setErrMessage("Correo no registrado");
         console.log(ErrMessage);
       });
   }
 
   //Funcion para registrar datos en la base de datos
-  async function RegistrarDatos(NoUsuario, Correo, NombreUsuario, TelefonoUsuario, Contacto) {
+  async function RegistrarDatos(
+    NoUsuario,
+    Correo,
+    NombreUsuario,
+    TelefonoUsuario,
+    Contacto
+  ) {
     try {
       const docRef = await addDoc(collection(db, "usuarios"), {
         Usuario: NoUsuario,
@@ -125,105 +167,153 @@ function Login() {
 
               <br />
               {registro ? (
-                <h2 className="text-black my-3">Login</h2>
+                <>
+                  <h2 className="text-black my-3">Login</h2>
+                  <Form.Group>
+                    <h5 className="text-secondary mt-4">Correo</h5>
+                    <Form.Control
+                      type="email"
+                      placeholder="Enter email"
+                      id="email"
+                      required
+                    />
+                  </Form.Group>
+
+                  <Form.Group>
+                    <h5 className="text-secondary mt-4">Contraseña</h5>
+                    <Form.Control
+                      type="password"
+                      placeholder="Password"
+                      id="password"
+                      required
+                    />
+                  </Form.Group>
+
+                  <p className="text-danger mt-2" id="error-message">
+                    {ErrMessage}
+                  </p>
+
+                  <div className="d-flex align-items-cneter justify-content-center">
+                    <Button
+                      variant="primary"
+                      className="mt-5 py-2 w-50"
+                      onClick={Ingresar}
+                    >
+                      Ingresar
+                    </Button>
+                  </div>
+
+                  <p className="text-secondary mt-3 d-flex justify-content-center align-items-center">
+                    No tienes cuenta? &nbsp;
+                    <a
+                      href="#"
+                      onClick={() => {
+                        setRegistro(!registro);
+                        setErrMessage(null);
+                      }}
+                    >
+                      {" "}
+                      Registrate
+                    </a>
+                  </p>
+                </>
               ) : (
-                <h2 className="text-black my-3">Sign in</h2>
-              )}
-              <Form name="formulario">
-                {!registro && (
-                  <>
+                <>
+                  <h2 className="text-black my-3">Sign in</h2>
+
+                  <form onSubmit={guardarData}>
                     <Form.Group>
                       <h5 className="text-secondary mt-4">Nombre*</h5>
                       <Form.Control
+                        id="usuario-nombre"
+                        name="nombre"
                         type="text"
                         placeholder="Enter name"
-                        id="NombreUsuario"
                         required
+                        onChange={capturarData}
+                      />
+                    </Form.Group>
+
+                    <Form.Group>
+                      <h5 className="text-secondary mt-4">Apellido*</h5>
+                      <Form.Control
+                        id="usuario-apellido"
+                        name="apellido"
+                        type="text"
+                        placeholder="Enter name"
+                        required
+                        onChange={capturarData}
                       />
                     </Form.Group>
 
                     <Form.Group>
                       <h5 className="text-secondary mt-4">Teléfono</h5>
                       <Form.Control
+                        id="usuario-telefono"
+                        name="telefono"
                         type="text"
                         placeholder="Enter phone"
-                        id="TelefonoUsuario"
+                        onChange={capturarData}
                       />
                     </Form.Group>
-                  </>
-                )}
 
-                <Form.Group>
-                  <h5 className="text-secondary mt-4">Correo*</h5>
-                  <Form.Control
-                    type="email"
-                    placeholder="Enter email"
-                    id="email"
-                    required
-                  />
-                </Form.Group>
+                    <Form.Group>
+                      <h5 className="text-secondary mt-4">Correo*</h5>
+                      <Form.Control
+                        id="usuario-email"
+                        name="email"
+                        type="email"
+                        placeholder="Enter email"
+                        required
+                        onChange={capturarData}
+                      />
+                    </Form.Group>
 
-                <Form.Group>
-                  <h5 className="text-secondary mt-4">Contraseña*</h5>
-                  <Form.Control
-                    type="password"
-                    placeholder="Password"
-                    id="password"
-                    required
-                  />
-                </Form.Group>
+                    <Form.Group>
+                      <h5 className="text-secondary mt-4">Contraseña*</h5>
+                      <Form.Control
+                        id="usuario-password"
+                        name="password"
+                        type="password"
+                        placeholder="Password"
+                        required
+                      />
+                    </Form.Group>
 
-                <p className="text-danger mt-2" id="error-message">{ErrMessage}</p>
+                    <p className="text-danger mt-2" id="error-message">
+                      {ErrMessage}
+                    </p>
 
-                <div className="d-flex d-flex row justify-content-center align-items-center">
-                  {registro ? (
-                    <>
+                    <div className="d-flex align-items-cneter justify-content-center">
                       <Button
                         variant="primary"
                         className="mt-5 py-2 w-50"
-                        onClick={Ingresar}
-                      >
-                        Ingresar
-                      </Button>
-                      <p className="text-secondary mt-3 d-flex justify-content-center align-items-center">
-                        No tienes cuenta? &nbsp;
-                        <a
-                          href="#"
-                          onClick={() => {
-                            setRegistro(!registro);
-                            setErrMessage(null);
-                          }}
-                        >
-                          {" "}
-                          Registrate
-                        </a>
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <Button
-                        variant="primary"
-                        className="mt-4 py-2 w-50"
-                        onClick={Registrar}
+                        type="submit"
+                        onClick={() => {
+                          //Registrar();
+                          setErrMessage(null);
+                        }}
                       >
                         Registrar
                       </Button>
-                      <p className="text-secondary mt-3 d-flex justify-content-center align-items-center">
-                        Ya tienes cuenta?&nbsp;
-                        <a
-                          href="#"
-                          onClick={() => {
-                            setRegistro(!registro);
-                          }}
-                        >
-                          {" "}
-                          Ingresa
-                        </a>
-                      </p>
-                    </>
-                  )}
-                </div>
-              </Form>
+                    </div>
+                  </form>
+
+                  <p className="text-secondary mt-3 d-flex justify-content-center align-items-center">
+                    Ya tienes cuenta?&nbsp;
+                    <a
+                      href="#"
+                      onClick={() => {
+                        setRegistro(!registro);
+                        setErrMessage(null);
+                      }}
+                    >
+                      {" "}
+                      Ingresa
+                    </a>
+                  </p>
+                </>
+              )}
             </div>
           </Col>
         </Row>
