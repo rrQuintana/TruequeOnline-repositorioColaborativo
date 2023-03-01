@@ -8,8 +8,6 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { AuthContext } from "../../AuthContext";
-import { db } from "../firebase.config";
-import { collection, addDoc } from "firebase/firestore";
 import axios from "axios"
 
 function Login() {
@@ -20,7 +18,9 @@ function Login() {
   const auth = getAuth();
   const { setIsAuthenticated } = useContext(AuthContext);
   const { setUser } = useContext(AuthContext);
+  const { setUserData } = useContext(AuthContext);
 
+  //Constructor para usuario default
   const Usuario = {
     nombre: "",
     apellido: "",
@@ -29,20 +29,22 @@ function Login() {
     direccion: "Sin asignar",
     contacto: "Sin asignar",
     foto: "",
-    calificacion: 0,
+    calificacion: "Sin calificación",
     reportes: 0,
   };
   const [usuario, setUsuario] = useState(Usuario);
 
+  //Función para capturar los datos de los input
   const capturarData = (e) => {
     const { name, value } = e.target;
     setUsuario({ ...usuario, [name]: value });
   };
 
+  //Funcion para guardar los datos del usuario en mongo
   const guardarData = async (e) => {
     e.preventDefault();
 
-    //Crear función post
+    //Meter datos ingresados en 
     const newUser = {
       nombre: usuario.nombre,
       apellido: usuario.apellido,
@@ -56,10 +58,12 @@ function Login() {
     }
     console.log(newUser)
 
+    //Crear función post de los datos
     await axios.post("http://localhost:4000/api/usuarios", newUser)
 
     setUsuario({...Usuario});
     Registrar();
+    setUserData(newUser);
   };
 
   //Crear un usuario

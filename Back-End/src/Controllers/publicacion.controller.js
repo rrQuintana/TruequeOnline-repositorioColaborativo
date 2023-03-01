@@ -9,11 +9,14 @@ publicacionCtrl.getPost = async (req, res) => {
 };
 
 publicacionCtrl.createPost = async (req, res) => {
-    const { titulo, contenido, autor } = req.body;
+    const { titulo, contenido, categoria, precio, reportes, autor } = req.body;
     const newPost = new Publicacion({
         titulo: titulo,
         contenido: contenido,
-        autor: autor,
+        categoria: categoria,
+        precio: precio,
+        reportes: reportes,
+        autor: autor
     });
     await newPost.save();
     res.json({ message: 'Publicacion creada: ', newPost });
