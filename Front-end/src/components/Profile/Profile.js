@@ -74,7 +74,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
                 <p>Contacto: {Contacto}</p>
                 <p>Id usuario: {NoUsuario}</p>
                 <Button variant="primary">
-                  <Link className="text-white">Subir un producto</Link>
+                  <Link className="text-white" to="/newProduct">Subir un producto</Link>
                 </Button>
               </Col>
             </Row>
