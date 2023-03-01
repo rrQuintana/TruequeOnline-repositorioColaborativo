@@ -1,31 +1,20 @@
-import React, { useState, useContext, useEffect } from "react";
-
-import { Container, Row, Col, Image,  Card } from "react-bootstrap";
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import { Typography } from '@mui/material';
-import Modal from '@mui/material/Modal';
+import React, { useState,useContext, useEffect } from "react";
+import { Container, Row, Col, Image, Button, Card } from "react-bootstrap";
 import { NavBar } from "../LandingPage/NavBar";
 import { AuthContext } from "../../AuthContext";
 import { Link } from "react-router-dom";
 import DefaulUserIcon from "./default-user.png";
 import "./Profile.css";
-import { db } from "../firebase.config";
-import { collection, query, where, getDocs } from "firebase/firestore";
 import axi from "axios";
 
 function Profile() {
   const { isAuthenticated } = useContext(AuthContext); //Saber si el usuario está autenticado
   const { isUser } = useContext(AuthContext); //Obtener los datos del usuario
-  const [NombreUsuario, setNombreUsuario] = useState(""); //Manejadores de estado para Nombre de usuario
-  const [NoUsuario, setNoUsuario] = useState(""); //Manejadores de estado para Nombre de usuario
-  const [Telefono, setTelefono] = useState(""); //Manejadores de estado para Telefono
-  const [Correo, setCorreo] = useState(""); //Manejadores de estado para Correo
-  const [Contacto, setContacto] = useState(""); //Manejadores de estado para Contacto
+
+  const [datosUsuaro, setDatosUsuario] = useState([]); //Manejadores de estado para datos de usuario
 
   //Función para cargar los datos del usuariop
   useEffect(() => {
-<<<<<<< Updated upstream
     async function CargarDatos(){
       
       const campoBuscado = isUser.email; //Correo del usuario      
@@ -37,29 +26,9 @@ function Profile() {
       setTelefono(InfoUsuario.telefono);
       setCorreo(InfoUsuario.correo);
       setContacto(InfoUsuario.contacto);
-=======
-    async function CargarDatos() {
-      const campoBuscado = isUser.uid; //Id del usuario
-
-      //Hacer el querry de sus datos
-      const q = query(
-        collection(db, "usuarios"),
-        where("Usuario", "==", campoBuscado)
-      );
-
-      //Extraer los datos y almacenarlos en variables de estado
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        setNombreUsuario(doc.data().Nombre);
-        setNoUsuario(doc.data().Usuario);
-        setTelefono(doc.data().Telefono);
-        setCorreo(doc.data().Correo);
-        setContacto(doc.data().Contacto);
-      });
->>>>>>> Stashed changes
     }
     CargarDatos();
-  }, [])
+  }, []);
 
   return (
     <>
@@ -78,8 +47,8 @@ function Profile() {
               >
                 <Image
                   src={
-                    isUser.proactiveRefresh.user.photoURL
-                      ? isUser.proactiveRefresh.user.photoURL
+                    datosUsuaro.foto
+                      ? datosUsuaro.foto
                       : DefaulUserIcon
                   }
                   alt="profile pic"
@@ -96,13 +65,8 @@ function Profile() {
                 <p>Teléfono: {Telefono}</p>
                 <p>Contacto: {Contacto}</p>
                 <p>Id usuario: {NoUsuario}</p>
-<<<<<<< Updated upstream
                 <Button variant="primary">
                   <Link className="text-white" to="/newProduct">Subir un producto</Link>
-=======
-                <Button variant="contained">
-                  <li className="fas fa-edit"></li> Editar
->>>>>>> Stashed changes
                 </Button>
               </Col>
             </Row>

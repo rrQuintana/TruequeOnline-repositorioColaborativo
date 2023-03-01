@@ -1,24 +1,47 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { NavBar } from "../LandingPage/NavBar";
 import { db } from "../firebase.config";
 import { collection, addDoc, query, getDocs } from "firebase/firestore";
+import { AuthContext } from "../../AuthContext";
+import axios from "axios"
 
 function NewProduct() {
+
+  const { isUser } = useContext(AuthContext);
+
   //Manejadores de estado para publicaciones
   const Publicacion = {
     titulo: "",
     contenido: "",
-    category: "",
+    categoria: "",
     precio: "",
     reportes: 0,
-    autor: "",
+    autor: isUser.email,
   };
-
   const [publicacion, setPublicacion] = useState(Publicacion);
 
-  const capturarDatos = (e) => {
+  const capturarData = (e) => {
     const { name, value } = e.target;
     setPublicacion({ ...publicacion, [name]: value });
+  };
+
+  const guardarData = async (e) => {
+    e.preventDefault();
+
+    //Crear función post
+    const newPublicacion = {
+      titulo: publicacion.titulo,
+      contenido: publicacion.contenido,
+      categoria: publicacion.categoria,
+      precio: publicacion.precio,
+      reportes: publicacion.reportes,
+      autor: publicacion.autor,
+    }
+    console.log(newPublicacion)
+
+    await axios.post("http://localhost:4000/api/publicaciones", newPublicacion)
+
+    setPublicacion({...Publicacion});
   };
 
   //Funcion para guardar datos en la base de datos
@@ -41,6 +64,7 @@ function NewProduct() {
       <NavBar></NavBar> <br /> <br /> <br /> <br />
       <h1>Agregar productos</h1>
       <div className="w-50">
+        <form onSubmit={guardarData}>
         <div className="input-group flex-nowrap">
           <span className="input-group-text" id="addon-wrapping">
             Título
@@ -51,7 +75,7 @@ function NewProduct() {
             type="text"
             className="form-control"
             placeholder="Título"
-            value={publicacion.titulo}
+            onChange={capturarData}
           />
         </div>
         <br />
@@ -66,7 +90,7 @@ function NewProduct() {
             type="text"
             className="form-control"
             placeholder="Descripción"
-            value={publicacion.contenido}
+            onChange={capturarData}
           />
         </div>
         <br />
@@ -76,7 +100,7 @@ function NewProduct() {
           <select
             id="publicacion-categoria"
             name="categoria"
-            value={publicacion.categoria}
+            onChange={capturarData}
           >
             <option value="">Seleccione una categoría</option>
             <option value="ropa">Ropa y accesorios</option>
@@ -96,7 +120,7 @@ function NewProduct() {
           <label
             className="input-group-text"
             name="precio"
-            value={publicacion.precio}
+            onChange={capturarData}
           >
             Precio
           </label>
@@ -116,9 +140,10 @@ function NewProduct() {
           </select>
         </div>
 
-        <button className="btn btn-primary" onClick={Guardar}>
+        <button className="btn btn-primary"type="submit">
           Guardar
         </button>
+        </form>        
       </div>
     </div>
   );
