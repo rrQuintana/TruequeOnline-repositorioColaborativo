@@ -12,6 +12,7 @@ import "aos/dist/aos.css";
 import Aos from "aos";
 import NewProduct from "./components/Profile/NewProduct";
 import Login from "./components/Login/Login";
+import EditarPersona from "./components/Profile/EditarPersona";
 
 function App() {
   
@@ -29,7 +30,7 @@ function App() {
             <Route path="/login" element={<Login />} /> 
             <Route path="/profile" element={<Profile />} /> 
             <Route path="/productos" element={<Products />} />
-            <Route path="/newProduct" element={<NewProduct />} /> 
+            <Route path="/EditarPersona" element={<EditarPersona />} /> 
             <Route path="*" element={<Error404 />} />
           </Routes>
         </BrowserRouter>

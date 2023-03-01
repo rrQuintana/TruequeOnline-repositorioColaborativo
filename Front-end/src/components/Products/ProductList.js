@@ -13,7 +13,7 @@ function ProductList() {
       Imagen: { imagenProducto },
       Titulo: "Titulo",
       Item1: "Item 1",
-    },
+    }
   ];
 
   async function Listar(){
@@ -33,7 +33,6 @@ function ProductList() {
       products.push(productData);
       console.log("products: ");
       console.log(products);
-      
     });
   }
   

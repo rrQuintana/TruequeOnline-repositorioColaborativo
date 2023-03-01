@@ -1,7 +1,6 @@
 const { Schema, model } = require('mongoose');
 
 const usuarioSchema = new Schema({
-    
     nombre: String,
     apellido: String,
     telefono: Number,
@@ -11,7 +10,6 @@ const usuarioSchema = new Schema({
     foto: String,
     calificacion: String,
     reportes: Number,
-    
 },
 {
     timestamps: true,

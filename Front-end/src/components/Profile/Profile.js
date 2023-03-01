@@ -1,5 +1,10 @@
-import React, { useState,useContext, useEffect } from "react";
-import { Container, Row, Col, Image, Button, Card } from "react-bootstrap";
+import React, { useState, useContext, useEffect } from "react";
+
+import { Container, Row, Col, Image,  Card } from "react-bootstrap";
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import { Typography } from '@mui/material';
+import Modal from '@mui/material/Modal';
 import { NavBar } from "../LandingPage/NavBar";
 import { AuthContext } from "../../AuthContext";
 import { Link } from "react-router-dom";
@@ -9,7 +14,7 @@ import { db } from "../firebase.config";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import axi from "axios";
 
- function Profile() {
+function Profile() {
   const { isAuthenticated } = useContext(AuthContext); //Saber si el usuario está autenticado
   const { isUser } = useContext(AuthContext); //Obtener los datos del usuario
   const [NombreUsuario, setNombreUsuario] = useState(""); //Manejadores de estado para Nombre de usuario
@@ -20,6 +25,7 @@ import axi from "axios";
 
   //Función para cargar los datos del usuariop
   useEffect(() => {
+<<<<<<< Updated upstream
     async function CargarDatos(){
       
       const campoBuscado = isUser.email; //Correo del usuario      
@@ -31,16 +37,39 @@ import axi from "axios";
       setTelefono(InfoUsuario.telefono);
       setCorreo(InfoUsuario.correo);
       setContacto(InfoUsuario.contacto);
+=======
+    async function CargarDatos() {
+      const campoBuscado = isUser.uid; //Id del usuario
+
+      //Hacer el querry de sus datos
+      const q = query(
+        collection(db, "usuarios"),
+        where("Usuario", "==", campoBuscado)
+      );
+
+      //Extraer los datos y almacenarlos en variables de estado
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        setNombreUsuario(doc.data().Nombre);
+        setNoUsuario(doc.data().Usuario);
+        setTelefono(doc.data().Telefono);
+        setCorreo(doc.data().Correo);
+        setContacto(doc.data().Contacto);
+      });
+>>>>>>> Stashed changes
     }
     CargarDatos();
   }, [])
 
   return (
-    <div>
+    <>
+      
       <NavBar></NavBar>
-
+      
       {isAuthenticated ? (
+        
         <div className="bg-secondary vh-100 h-custom d-flex row justify-content-center align-items-center">
+          
           <div className="container">
             <Row className="bg-dark py-4">
               <Col
@@ -67,17 +96,25 @@ import axi from "axios";
                 <p>Teléfono: {Telefono}</p>
                 <p>Contacto: {Contacto}</p>
                 <p>Id usuario: {NoUsuario}</p>
+<<<<<<< Updated upstream
                 <Button variant="primary">
                   <Link className="text-white" to="/newProduct">Subir un producto</Link>
+=======
+                <Button variant="contained">
+                  <li className="fas fa-edit"></li> Editar
+>>>>>>> Stashed changes
                 </Button>
               </Col>
             </Row>
           </div>
         </div>
+
+
       ) : (
         <h1>Sin inicio de sesión</h1>
       )}
-    </div>
+      
+    </>
   );
 }
 
