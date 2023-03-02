@@ -74,10 +74,24 @@
     height: 420px;
     box-shadow: -18px 15px 15px rgba(113, 147, 176, 0.19) ;
   }
-  .product-bx-p{
-    font-size: 1em;
+  .product-bx-h{
+    font-size: 1.5em;
     color: #000000;
     margin-bottom: 2px;
+  }
+  .product-bx-p{
+    font-size: .8em;
+    color: #000000;
+    margin-bottom: 2px;
+  }
+  .product-bx-p-description{
+    font-size: 0.75em;
+    color: #000000;
+    margin-bottom: 2px;
+    padding-inline: 25px;
+    overflow: hidden; /* oculta el texto que excede la altura */
+    text-overflow: ellipsis; /* agrega puntos suspensivos al final del tercer línea de texto */
+    white-space: nowrap; /* evita que el texto se divida en varias líneas */
   }
   .product-bx:hover{ 
     border-bottom: 10px solid #000000 ;
