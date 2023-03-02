@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import backgroundImage from "./background.jpg";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +13,7 @@ import axios from "axios"
 function Login() {
   const [registro, setRegistro] = useState(true); //Manejadores de estado para registrar o logear
   const [ErrMessage, setErrMessage] = useState(null); //Manejador de estado para el mensaje de error
-  const navigate = useNavigate();
+  const navigate = useNavigate();//Obtener los datos del usuario
 
   const auth = getAuth();
   const { setIsAuthenticated } = useContext(AuthContext);
@@ -109,8 +109,7 @@ function Login() {
         setIsAuthenticated(true);
         setUser(user);
         navigate("/");
-
-       
+        CargarDatos(user);
 
       })
       .catch((error) => {
@@ -121,6 +120,16 @@ function Login() {
           : setErrMessage("Correo no registrado");
         console.log(ErrMessage);
       });
+  }
+
+  //Cargar datos del usuario a todos los componentes
+  async function CargarDatos(user){            
+    console.log('Datos firebase:',user)
+    const campoBuscado = user.email; //Correo del usuario      
+    const res = await axios.get(`http://localhost:4000/api/usuarios/${campoBuscado}`)
+    const InfoUsuario = res.data
+    console.log('Datos mongo: ',InfoUsuario)
+    setUserData(InfoUsuario)
   }
 
   return (
