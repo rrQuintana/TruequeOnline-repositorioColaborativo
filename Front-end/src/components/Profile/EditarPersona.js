@@ -25,12 +25,22 @@ function EditarPersona() {
 
                         <div class="inputContainer">
                             <input type="text" class="input" placeholder="a" />
-                            <label for="" class="label">Password</label>
+                            <label for="" class="label">Foto</label>
                         </div>
 
                         <div class="inputContainer">
                             <input type="text" class="input" placeholder="a" />
-                            <label for="" class="label">Confirm Password</label>
+                            <label for="" class="label">Telefono</label>
+                        </div>
+
+                        <div class="inputContainer">
+                            <input type="text" class="input" placeholder="a" />
+                            <label for="" class="label">Direccion</label>
+                        </div>
+
+                        <div class="inputContainer">
+                            <input type="text" class="input" placeholder="a" />
+                            <label for="" class="label">Contacto</label>
                         </div>
 
                         <input type="submit" class="submitBtn" value="Sign up" />
