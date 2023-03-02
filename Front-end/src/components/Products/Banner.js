@@ -5,6 +5,10 @@ import { NavBar } from "../LandingPage/NavBar";
 import "aos/dist/aos.css";
 import "./Products.css";
 
+import Button from '@mui/material/Button';
+import { Link } from "react-router-dom";
+
+
 export const Banner = () => {
 
   //Funciones para animar texto
@@ -56,6 +60,7 @@ export const Banner = () => {
   return (
     <>
       <NavBar></NavBar>
+      
       <section
         className="products-banner h-custom vh-100 d-flex justify-content-center align-items-center "
         id="home"
@@ -67,7 +72,7 @@ export const Banner = () => {
           <div className="Letras w-100" id="Banner-Text">
             <div data-aos="fade-right ">
               <h1 className="text-black w-50">
-              Encuentra lo que necesitas para tus estudios en un solo lugar
+                Encuentra lo que necesitas para tus estudios en un solo lugar
               </h1>
               <h2>
                 <span
@@ -77,11 +82,14 @@ export const Banner = () => {
                   <span className="wrap text-dark">{text}</span>
                 </span>
               </h2>
-              
+
             </div>
           </div>
         </Container>
       </section>
+      <Button variant="contained">
+        <Link className="text-white" to="/ProductPage">Ir a Pagina de Productos</Link>
+      </Button>
     </>
   );
 };

@@ -14,6 +14,7 @@ function ProductList() {
   }, [lista]);
 
   return (
+    
     <div className="h-custom d-flex row products-list justify-content-center align-items-center">
       <h1>Productos</h1>
       <div className="container-fluid d-flex m-3 flex-wrap justify-content-center align-items-center">
