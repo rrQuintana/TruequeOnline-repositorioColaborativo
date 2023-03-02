@@ -13,7 +13,7 @@ import axios from "axios"
 function Login() {
   const [registro, setRegistro] = useState(true); //Manejadores de estado para registrar o logear
   const [ErrMessage, setErrMessage] = useState(null); //Manejador de estado para el mensaje de error
-  const navigate = useNavigate();//Obtener los datos del usuario
+  const navigate = useNavigate();
 
   const auth = getAuth();
   const { setIsAuthenticated } = useContext(AuthContext);

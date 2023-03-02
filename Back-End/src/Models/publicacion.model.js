@@ -1,12 +1,12 @@
 const { Schema, model } = require('mongoose');
 
 const publicacionSchema = new Schema({
-    titulo: { type: String, required: true },
-    contenido: { type: String, required: true },
+    titulo: { type: String, },
+    contenido: { type: String },
     categoria: { type: String },
-    precio: { type: String, required: true },
-    reportes: { type: Number, required: true },
-    autor: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
+    precio: { type: String },
+    reportes: { type: Number, },
+    autor: { type: Schema.Types.ObjectId, ref: 'Usuario', },
 },
 {
     timestamps: true
