@@ -32,9 +32,6 @@ function ProductPage() {
             {isAuthenticated ? (
                 <div className="all">
                     <NavBar></NavBar> <br /> <br /> <br />
-                    <Button>
-                        <Link to="/productos" className="btn">Regresar a Productos</Link>
-                    </Button>
                     <br /> <br />
                     <section className="section about-section gray-bg" id="about">
                         <div className="container">
@@ -42,12 +39,15 @@ function ProductPage() {
                                 <div className="col-lg-6">
                                     <div className="about-text go-to">
                                         <h3 className="dark-color">Celular Huawei</h3>
-                                        <h6 className="theme-color lead">Listado por: Oliver Gil </h6>
+                                        <br></br>
                                         
-                                        <ThemeProvider theme={theme}>
-                                        <Chip label="Electrodomesticos" color="success" />
-                                            </ThemeProvider>
+                                        <h6 className="theme-color lead">Listado por: Oliver Gil </h6>
+                                        <h6 className="theme-color lead">Precio: <p >El precio es  de 5,000 </p></h6>
 
+                                        <Chip label="Electrodomesticos" color="success" variant="outlined"/>
+                                        <br></br>
+                                        <br></br>
+                                        <p style={{color: 'black'}}>Descripcion de un producto: </p>
                                         <p className="pp">Es un celular de la marca Huaei con 32 gb de ram y un porcesador snaopdragon bla bla</p>
                                     </div>
                                 </div>
@@ -60,7 +60,9 @@ function ProductPage() {
                            
                         </div>
                     </section>
-
+                    <Button className="btn22">
+                        <Link to="/productos" className="btn">Regresar a Productos</Link>
+                    </Button>
                 </div>
             ) : (
                 <div className="all2">
