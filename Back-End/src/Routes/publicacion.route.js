@@ -6,15 +6,15 @@ const { getPost, createPost, getPublicacion, getComentariosPublicacion, buscarPu
 router.route('/')
   .get(getPost)
   .post(createPost)
-
-router.route('/buscar')
-  .get(buscarPublicaciones)
-
+  
 router.route('/:id')
   .get(getPublicacion)
   .delete(deletePost)
   .put(updatePost)
-
+  
+  router.route('/buscar/:id')
+    .get(buscarPublicaciones)
+  
   router.route('/comentarios/:id')
   .get(getComentariosPublicacion)
 

@@ -3,6 +3,8 @@ const publicacionCtrl = {};
 const Publicacion = require('../Models/publicacion.model');
 const Comentario = require('../Models/comentario.model');
 
+//////////////////////////{ CRUD Publicaciones }//////////////////////////
+
 publicacionCtrl.getPost = async (req, res) => {
     const publicaciones = await Publicacion.find();
     res.json(publicaciones);
@@ -16,7 +18,7 @@ publicacionCtrl.createPost = async (req, res) => {
         categoria: categoria,
         precio: precio,
         reportes: reportes,
-        autor: autor
+        autor: autor,
     });
     await newPost.save();
     res.json({ message: 'Publicacion creada: ', newPost });
@@ -25,17 +27,6 @@ publicacionCtrl.createPost = async (req, res) => {
 publicacionCtrl.getPublicacion = async (req, res) => {
     const publicacion = await Publicacion.findById(req.params.id);
     res.json(publicacion);
-};
-
-publicacionCtrl.getComentariosPublicacion = (req, res) => {
-    Comentario.find({ publicacion: req.params.id })
-      .populate('publicacion')
-      .exec((err, comentarios) => {
-        if (err) {
-          return res.status(500).json({ error: err.message });
-        }
-        res.status(200).json(comentarios);
-      });
 };
 
 publicacionCtrl.deletePost = async (req, res) => {
@@ -53,23 +44,23 @@ publicacionCtrl.updatePost = async (req, res) => {
     res.json({ message: 'Publicacion actualizada' });
 };
 
-publicacionCtrl.buscarPublicaciones = (req, res) => {
-    const busqueda = req.query.busqueda;
-    const regex = new RegExp(busqueda, 'i');
-  
-    Publicacion.find({
-      $or: [
-        { titulo: regex },
-        { contenido: regex }
-      ]
-    })
-      .populate('autor')
-      .exec((err, publicaciones) => {
-        if (err) {
-          return res.status(500).json({ error: err.message });
-        }
-        res.status(200).json(publicaciones);
-      });
-  };
+////////////////////////////////////////////////////////////////
+
+
+publicacionCtrl.buscarPublicaciones = async (req, res) => {
+  const publicaciones = await Publicacion.find({ autor: req.params.id });
+  res.json(publicaciones);
+};
+
+publicacionCtrl.getComentariosPublicacion = (req, res) => {
+  Comentario.find({ publicacion: req.params.id })
+    .populate('publicacion')
+    .exec((err, comentarios) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.status(200).json(comentarios);
+    });
+};
 
 module.exports = publicacionCtrl;
