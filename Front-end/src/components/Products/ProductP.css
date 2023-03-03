@@ -1,0 +1,28 @@
+.all{
+  background-color: white;
+}
+
+.all2{
+  background-color: white;
+}
+
+.contenedor {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    color: black;
+  }
+  
+  .imagenes {
+    flex: 1;
+  }
+  
+  .formulario {
+    flex: 1;
+    margin-left: 20px;
+  }
+  
+  .titulo
+{
+  text-align: center;
+}

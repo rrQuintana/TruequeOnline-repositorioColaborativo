@@ -7,7 +7,6 @@ import "aos/dist/aos.css";
   Espa página solo es para mostrar información de aboutme en la página principal
 */
 export const AboutMe = () => {
-
   //Todas estas funciones son para dar algunas animaciones al texto
   
   // Define the text to be typed and the initial state of the text
