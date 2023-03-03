@@ -1,37 +1,29 @@
 import { NavBar } from "../LandingPage/NavBar";
 import { AuthContext } from "../../AuthContext";
 import React, { useContext } from "react";
-import { Button } from "react-bootstrap";
+import { Button, ThemeProvider } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import logo from "../../assets/img/SVG/Logo.svg";
 import "./ProductP.css";
 
-import { styled } from '@mui/material/styles';
-import Card from '@mui/material/Card';
 import Box from '@mui/material/Box';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-const bull = (
-    <Box
-        component="span"
-        sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-    >
-        •
-    </Box>
-);
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
 
+import { createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  status: {
+    success: '#DCFFC7',
+  },
+  palette: {
+    success: {
+      main: '#DCFFC7',
+      darker: '#DCFFC7',
+    }
+  },
+});
 
 function ProductPage() {
     const { isAuthenticated } = useContext(AuthContext);
@@ -44,40 +36,30 @@ function ProductPage() {
                         <Link to="/productos" className="btn">Regresar a Productos</Link>
                     </Button>
                     <br /> <br />
-                    <div className="contenedor">
-                        <Card sx={{ minWidth: 275 }}>
-                            <CardContent>
-                                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                    Word of the Day
-                                </Typography>
-                                <Typography variant="h5" component="div">
-                                    be{bull}nev{bull}o{bull}lent
-                                </Typography>
-                                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                    adjective
-                                </Typography>
-                                <Typography variant="body2">
-                                    well meaning and kindly.
-                                    <br />
-                                    {'"a benevolent smile"'}
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Button size="small">Learn More</Button>
-                            </CardActions>
-                        </Card>
-                        <div className="formulario">
-                            <form>
-                                <label type="Title" className="titulo">Titulo:</label>
-                                <br /><br />
-                                <label htmlFor="email">Email:</label>
-                                <input type="email" id="email" name="email" /><br /><br />
-                                <label htmlFor="mensaje">Mensaje:</label>
-                                <textarea id="mensaje" name="mensaje"></textarea><br /><br />
-                                <input type="submit" value="Enviar" />
-                            </form>
+                    <section className="section about-section gray-bg" id="about">
+                        <div className="container">
+                            <div className="row align-items-center flex-row-reverse">
+                                <div className="col-lg-6">
+                                    <div className="about-text go-to">
+                                        <h3 className="dark-color">Celular Huawei</h3>
+                                        <h6 className="theme-color lead">Listado por: Oliver Gil </h6>
+                                        
+                                        <ThemeProvider theme={theme}>
+                                        <Chip label="Electrodomesticos" color="success" />
+                                            </ThemeProvider>
+
+                                        <p className="pp">Es un celular de la marca Huaei con 32 gb de ram y un porcesador snaopdragon bla bla</p>
+                                    </div>
+                                </div>
+                                <div className="col-lg-6">
+                                    <div className="about-avatar">
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" title="" alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                           
                         </div>
-                    </div>
+                    </section>
 
                 </div>
             ) : (
