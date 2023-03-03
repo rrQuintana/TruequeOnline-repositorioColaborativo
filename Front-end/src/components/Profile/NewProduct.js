@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { NavBar } from "../LandingPage/NavBar";
 import { db } from "../firebase.config";
 import { collection, addDoc, query, getDocs } from "firebase/firestore";

@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Row, Col, Image, Card } from "react-bootstrap";
 import { NavBar } from "../LandingPage/NavBar";
 import { AuthContext } from "../../AuthContext";
 import { Link } from "react-router-dom";
 import DefaultUserIcon from "./default-user.png";
 import "./Profile.css";
-
+import axios from "axios";
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
@@ -32,6 +32,24 @@ function Profile() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [lista, setLista] = useState([]);
+
+  useEffect(() => {
+    const getPubliaciones = async () => {
+      const res = await axios.get(
+        `http://localhost:4000/api/publicaciones/buscar/${UserData._id}`
+      );
+      setLista(res.data);
+    };
+    getPubliaciones();
+  }, [lista]);  
+
+  const eliminarProducto = async (id) => {
+    window.confirm("¿Está seguro de eliminar este producto?") ? 
+    await axios.delete(`http://localhost:4000/api/publicaciones/${id}`) :
+    window.alert("No se eliminó el producto");
+  };
 
 
   return (
@@ -122,6 +140,48 @@ function Profile() {
                   </Box>
                 </Modal>
               </Col>
+              <div>
+                <h1 className="m-5">Mis productos:</h1>
+                <div className="container-fluid d-flex m-3 flex-wrap justify-content-center align-items-center">
+                  {lista.map((list) => (
+                    <div
+                      className="product-bx d-flex row flex-wrap justify-content-center align-items-center"
+                      key={list._id}
+                    >
+                      <div className="product-img-container my-2 d-flex flex-wrap justify-content-center align-items-center">
+                        <img src={DefaultUserIcon} alt="imagen producto" />
+                      </div>
+                      <h4 className="product-bx-h d-flex flex-wrap justify-content-center align-items-center">
+                        {list.titulo}
+                      </h4>
+                      <div className="product-bx-p-description">
+                        {list.contenido}
+                      </div>
+                      <p className="product-bx-p mt-2 d-flex flex-wrap justify-content-center align-items-center">
+                        Acepta artículos de:
+                      </p>
+                      <div className="product-items-box d-flex flex-wrap justify-content-center align-items-center">
+                        <span>{list.precio}</span>
+                      </div>
+                      <p className="mt-2 product-bx-p-description d-flex flex-wrap justify-content-center align-items-center">
+                        Categoría: {list.categoria}
+                      </p>
+                      <button
+                        className="btn-danger"
+                        onClick={() => eliminarProducto(list._id)}
+                      >
+                        Eliminar
+                      </button>
+                      <Link
+                        to={`/editar/publicacion/${list._id}`}
+                        className="btn-primary"
+                      >
+                        Editar
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </Row>
           </div>
         </div>
