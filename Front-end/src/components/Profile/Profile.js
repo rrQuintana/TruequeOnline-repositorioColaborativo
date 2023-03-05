@@ -1,31 +1,31 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Row, Col, Image, Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { NavBar } from "../LandingPage/NavBar";
 import { AuthContext } from "../../AuthContext";
 import { Link } from "react-router-dom";
 import DefaultUserIcon from "./default-user.png";
 import "./Profile.css";
 import axios from "axios";
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Button from '@mui/material/Button';
-
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Button from "@mui/material/Button";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
   // bgcolor: 'black',
   // border: '2px solid #000',
   // boxShadow: 24,
-  color: 'transparent',
+  color: "transparent",
   p: 4,
 };
 
-
 function Profile() {
+  const navigate = useNavigate();
   const { isAuthenticated } = useContext(AuthContext); //Saber si el usuario está autenticado
   const { UserData } = useContext(AuthContext);
 
@@ -36,31 +36,29 @@ function Profile() {
   const [lista, setLista] = useState([]);
 
   useEffect(() => {
-    const getPubliaciones = async () => {
-      const res = await axios.get(
-        `http://localhost:4000/api/publicaciones/buscar/${UserData._id}`
-      );
-      setLista(res.data);
-    };
-    getPubliaciones();
-  }, [lista]);  
+    if (isAuthenticated) {
+      const getPubliaciones = async () => {
+        const res = await axios.get(
+          `http://localhost:4000/api/publicaciones/buscar/${UserData._id}`
+        );
+        setLista(res.data);
+      };
+      getPubliaciones();
+    }
+  }, [lista]);
 
   const eliminarProducto = async (id) => {
-    window.confirm("¿Está seguro de eliminar este producto?") ? 
-    await axios.delete(`http://localhost:4000/api/publicaciones/${id}`) :
-    window.alert("No se eliminó el producto");
+    window.confirm("¿Está seguro de eliminar este producto?")
+      ? await axios.delete(`http://localhost:4000/api/publicaciones/${id}`)
+      : window.alert("No se eliminó el producto");
   };
-
 
   return (
     <>
-
       <NavBar></NavBar>
 
       {isAuthenticated ? (
-
         <div className="bg-secondary vh-100 h-custom d-flex row justify-content-center align-items-center">
-
           <div className="container">
             <Row className="bg-dark py-4">
               <Col
@@ -68,11 +66,7 @@ function Profile() {
                 className="d-flex row justify-content-center align-items-center"
               >
                 <Image
-                  src={
-                    UserData.foto
-                      ? UserData.foto
-                      : DefaultUserIcon
-                  }
+                  src={UserData.foto ? UserData.foto : DefaultUserIcon}
                   alt="profile pic"
                   style={{ width: "220px", height: "200px" }}
                   roundedCircle
@@ -89,47 +83,58 @@ function Profile() {
                 <p>Ubicación: {UserData.direccion}</p>
                 <p>Contacto: {UserData.contacto}</p>
                 <Button variant="contained">
-                  <Link className="text-white" to="/newProduct">Subir un producto</Link>
+                  <Link className="text-white" to="/newProduct">
+                    Subir un producto
+                  </Link>
                 </Button>
-                <Button onClick={handleOpen} color="error" >Editar Perfil</Button>
-                <Modal
-                 
-                  open={open}
-                  onClose={handleClose}
-                >
-                  <Box >
+                <Button onClick={handleOpen} color="error">
+                  Editar Perfil
+                </Button>
+                <Modal open={open} onClose={handleClose}>
+                  <Box>
                     <div class="todo">
                       <div class="signupFrm">
                         <form action="" class="form">
-
                           <div class="inputContainer">
                             <input type="text" class="input" placeholder="a" />
-                            <label for="" class="label">Nombre</label>
+                            <label for="" class="label">
+                              Nombre
+                            </label>
                           </div>
 
                           <div class="inputContainer">
                             <input type="text" class="input" placeholder="a" />
-                            <label for="" class="label">Apellido</label>
+                            <label for="" class="label">
+                              Apellido
+                            </label>
                           </div>
 
                           <div class="inputContainer">
                             <input type="text" class="input" placeholder="a" />
-                            <label for="" class="label">Foto</label>
+                            <label for="" class="label">
+                              Foto
+                            </label>
                           </div>
 
                           <div class="inputContainer">
                             <input type="text" class="input" placeholder="a" />
-                            <label for="" class="label">Telefono</label>
+                            <label for="" class="label">
+                              Telefono
+                            </label>
                           </div>
 
                           <div class="inputContainer">
                             <input type="text" class="input" placeholder="a" />
-                            <label for="" class="label">Direccion</label>
+                            <label for="" class="label">
+                              Direccion
+                            </label>
                           </div>
 
                           <div class="inputContainer">
                             <input type="text" class="input" placeholder="a" />
-                            <label for="" class="label">Contacto</label>
+                            <label for="" class="label">
+                              Contacto
+                            </label>
                           </div>
 
                           {/* <input type="submit" class="submitBtn" value="Guardar" onClick={handleClose} /> */}
@@ -185,12 +190,13 @@ function Profile() {
             </Row>
           </div>
         </div>
-
-
       ) : (
-        <h1>Sin inicio de sesión</h1>
+        <div className="w-100 vh-100 bg-white">
+          <NavBar></NavBar> <br /> <br /> <br /> <br />
+        <h1 className="text-dark mt-5 d-flex align-items-center justify-content-center">Debes iniciar sesión para acceder a esta página</h1>
+        <h3 onClick={()=>navigate("/login")} className="text-dark mt-5 d-flex align-items-center justify-content-center"><a href="#">Ir a login</a></h3>
+        </div>
       )}
-
     </>
   );
 }

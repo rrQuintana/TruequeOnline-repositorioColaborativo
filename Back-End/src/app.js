@@ -11,7 +11,7 @@ app.use(express.json());
 
 // Routes
 app.get('/', (req, res) => {
-    res.send('Bienvenido a la API de Xchange');
+    res.send("Bienvenido a la api de Xchange")
 });
 
 //Body parsing to JSON

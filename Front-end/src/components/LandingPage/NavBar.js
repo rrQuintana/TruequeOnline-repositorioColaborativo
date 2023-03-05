@@ -7,20 +7,21 @@ import {
   getAuth,
   signOut,
 } from "firebase/auth";
+import axios from "axios"
 
 export const NavBar = () => {
   const [scrolled, setScrolled] = useState(false); //Saber si se escroleó la página para cambiar el estilo del navbar
   const { isAuthenticated } = useContext(AuthContext); //Saber de forma global si hay un usuario autenticado
   const { setIsAuthenticated } = useContext(AuthContext); //Establecer si un usuario está autenticado
-  const { isUser } = useContext(AuthContext);  //Obtener el objeto usuario
   const { setUser } = useContext(AuthContext); //Establecer el objeto usuario
   const auth = getAuth();
 
   //Proceso de cierre de seción con Google
   const logOut = () => {
-    setIsAuthenticated(false);
     signOut(auth);
     setUser(null);
+    setIsAuthenticated(false)
+    localStorage.setItem("email", null);
   };
 
   //Saber si se hizo scroll a la pagina para cambiar el estilo del nav

@@ -87,9 +87,6 @@ export const Banner = () => {
           </div>
         </Container>
       </section>
-      <Button variant="contained">
-        <Link className="text-white" to="/ProductPage">Ir a Pagina de Productos</Link>
-      </Button>
     </>
   );
 };

@@ -16,7 +16,6 @@
     border-radius: 10px;
     margin-block: 10000px;
     filter: blur(2);
-    
   }
   .products-banner h1 {
     font-size: 80px;
@@ -71,8 +70,9 @@
     padding-bottom: 20px;
     align-items: center;
     justify-content: center;
-    height: 420px;
+    height: 450px;
     box-shadow: -18px 15px 15px rgba(113, 147, 176, 0.19) ;
+    border-radius: 8px;
   }
   .product-bx-h{
     font-size: 1.5em;

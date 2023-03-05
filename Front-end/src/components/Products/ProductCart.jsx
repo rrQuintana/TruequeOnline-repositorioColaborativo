@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import imagen from "../../assets/img/img-prod.png";
 
-function ProductCart({titulo, contenido, categoria, precio}) {
+function ProductCart({_id, titulo, contenido, categoria, precio}) {
   return (
-    <Link to="https://google.com" style={{ textDecoration: "none" }} target="_blank">
+    <Link to={"/ProductPage/" + _id} style={{ textDecoration: "none" }} target="_blank">
       <div className=" product-bx d-flex row flex-wrap justify-content-center align-items-center">
         <div className="product-img-container my-2 d-flex flex-wrap justify-content-center align-items-center">
           <img src={imagen} alt="imagen producto" />
