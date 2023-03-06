@@ -72,7 +72,7 @@ export const Banner = () => {
           <div className="Letras w-100" id="Banner-Text">
             <div data-aos="fade-right ">
               <h1 className="text-black w-50">
-                Encuentra lo que necesitas para tus estudios en un solo lugar
+                Lo que necesitas para tus estudios en un solo lugar
               </h1>
               <h2>
                 <span
