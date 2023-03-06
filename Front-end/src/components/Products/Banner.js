@@ -72,7 +72,7 @@ export const Banner = () => {
           <div className="Letras w-100" id="Banner-Text">
             <div data-aos="fade-right ">
               <h1 className="text-black w-50">
-                Encuentra lo que necesitas para tus estudios en un solo lugar
+                Lo que necesitas para tus estudios en un solo lugar
               </h1>
               <h2>
                 <span
@@ -87,6 +87,13 @@ export const Banner = () => {
           </div>
         </Container>
       </section>
+      <Button variant="contained">
+        <Link className="text-white" to="/ProductPage">Ir a Pagina de Productos</Link>
+      </Button>
+
+      <Button variant="contained">
+        <Link className="text-white" to="/Comment">Ir a Pagina de Comentarios</Link>
+      </Button>
     </>
   );
 };

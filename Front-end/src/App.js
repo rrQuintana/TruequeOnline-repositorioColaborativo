@@ -12,6 +12,9 @@ import Aos from "aos";
 import NewProduct from "./components/Profile/NewProduct";
 import Login from "./components/Login/Login";
 import ProductPage from "./components/Products/ProductPage";
+import Commennt from "./components/Products/Comennt";
+import axios from "axios";
+import { AuthContext } from "./AuthContext";
 
 function App() {  
 
@@ -32,6 +35,8 @@ function App() {
             <Route path="/ProductPage/:id" element={<ProductPage />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/newProduct" element={<NewProduct />} />
+            <Route path="/ProductPage" element={<ProductPage />} />
+            <Route path="/Comment" element={<Commennt />} />
             <Route path="*" element={<Error404 />} />
           </Routes>
         </BrowserRouter>
