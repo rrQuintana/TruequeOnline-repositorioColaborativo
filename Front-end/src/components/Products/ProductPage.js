@@ -5,7 +5,6 @@ import "./ProductP.css";
 import axios from "axios";
 import { AuthContext } from "../../AuthContext";
 
-
 function ProductPage() {
   const { UserData } = useContext(AuthContext);
   const { isAuthenticated } = useContext(AuthContext); //Saber si el usuario está autenticado
@@ -36,7 +35,6 @@ function ProductPage() {
           "http://localhost:4000/api/publicaciones/comentarios/" + id
         );
         setLista(resComents.data);
-        
       }
     };
     extraerDatos();
@@ -56,8 +54,6 @@ function ProductPage() {
   };
 
   const guardarData = async (e) => {
-    e.preventDefault();
-
     try {
       if (isAuthenticated) {
         //Crear función post
@@ -155,6 +151,7 @@ function ProductPage() {
                 </div>
               ))}
             </div>
+
             <div className="col-lg-6">
               <h3 className="text-black fw-bold my-4">Dejar un comentario</h3>
               <form onSubmit={guardarData}>
@@ -171,6 +168,7 @@ function ProductPage() {
                 </button>
               </form>
             </div>
+            
           </div>
         </div>
       </section>

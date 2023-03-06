@@ -13,8 +13,6 @@ import NewProduct from "./components/Profile/NewProduct";
 import Login from "./components/Login/Login";
 import ProductPage from "./components/Products/ProductPage";
 import Commennt from "./components/Products/Comennt";
-import axios from "axios";
-import { AuthContext } from "./AuthContext";
 import ProductEdit from "./components/Products/ProductEdit";
 
 function App() {  

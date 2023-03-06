@@ -37,6 +37,7 @@ function Profile() {
 
   useEffect(() => {
     if (isAuthenticated) {
+      //Obtener publiaciones del usuario
       const getPubliaciones = async () => {
         const res = await axios.get(
           `http://localhost:4000/api/publicaciones/buscar/${UserData._id}`
@@ -51,6 +52,60 @@ function Profile() {
     window.confirm("¿Está seguro de eliminar este producto?")
       ? await axios.delete(`http://localhost:4000/api/publicaciones/${id}`)
       : window.alert("No se eliminó el producto");
+  };
+
+  const Usuario = {
+    nombre: UserData.nombre,
+    apellido: UserData.apellido,
+    telefono: UserData.telefono,
+    email: UserData.email,
+    direccion: UserData.direccion,
+    contacto: UserData.contacto,
+    foto: UserData.foto,
+    calificacion: UserData.calificacion,
+    reportes: UserData.reportes,
+  };
+  const [usuario, setUsuario] = useState(Usuario);
+
+  //Función para capturar los datos de los input
+  const capturarData = (e) => {
+    const { name, value } = e.target;
+    setUsuario({ ...usuario, [name]: value });
+  };
+
+  //Funcion para guardar los datos del usuario en mongo
+  const guardarData = async (e) => {
+    if (isAuthenticated) {
+      e.preventDefault();
+      //Meter datos ingresados en
+      const newUser = {
+        nombre: usuario.nombre,
+        apellido: usuario.apellido,
+        telefono: usuario.telefono,
+        email: usuario.email,
+        direccion: usuario.direccion,
+        contacto: usuario.contacto,
+        foto: usuario.foto,
+        calificacion: usuario.calificacion,
+        reportes: usuario.reportes,
+      };
+      try {
+        //Crear función post de los datos
+        await axios.put(
+          "http://localhost:4000/api/usuarios/" + UserData._id,
+          newUser
+        );
+        setUsuario({ ...Usuario });
+        handleClose();
+        window.alert("Datos actualizados");
+        window.location.reload();
+      } catch (error) {
+        console.log(error);
+        window.alert("Error al actualizar los datos");
+      }
+    } else {
+      window.alert("Debes iniciar sesión para editar tu perfil");
+    }
   };
 
   return (
@@ -94,51 +149,99 @@ function Profile() {
                   <Box>
                     <div class="todo">
                       <div class="signupFrm">
-                        <form action="" class="form">
+                        <form action="" class="form" onSubmit={guardarData}>
+                          <h2 className="text-secondary">Editar perfil</h2>
                           <div class="inputContainer">
-                            <input type="text" class="input" placeholder="a" />
+                            <input
+                              type="text"
+                              class="input text-black"
+                              placeholder="a"
+                              name="nombre"
+                              onChange={capturarData}
+                            />
                             <label for="" class="label">
                               Nombre
                             </label>
                           </div>
 
                           <div class="inputContainer">
-                            <input type="text" class="input" placeholder="a" />
+                            <input
+                              type="text"
+                              class="input"
+                              placeholder="a"
+                              name="apellido"
+                              onChange={capturarData}
+                            />
                             <label for="" class="label">
                               Apellido
                             </label>
                           </div>
 
                           <div class="inputContainer">
-                            <input type="text" class="input" placeholder="a" />
+                            <input
+                              type="text"
+                              class="input"
+                              placeholder="a"
+                              name="foto"
+                              onChange={capturarData}
+                            />
                             <label for="" class="label">
                               Foto
                             </label>
                           </div>
 
                           <div class="inputContainer">
-                            <input type="text" class="input" placeholder="a" />
+                            <input
+                              type="text"
+                              class="input"
+                              placeholder="a"
+                              name="telefono"
+                              onChange={capturarData}
+                            />
                             <label for="" class="label">
                               Telefono
                             </label>
                           </div>
 
                           <div class="inputContainer">
-                            <input type="text" class="input" placeholder="a" />
+                            <input
+                              type="text"
+                              class="input"
+                              placeholder="a"
+                              name="direccion"
+                              onChange={capturarData}
+                            />
                             <label for="" class="label">
                               Direccion
                             </label>
                           </div>
 
                           <div class="inputContainer">
-                            <input type="text" class="input" placeholder="a" />
+                            <input
+                              type="text"
+                              class="input"
+                              placeholder="a"
+                              name="contacto"
+                              onChange={capturarData}
+                            />
                             <label for="" class="label">
                               Contacto
                             </label>
                           </div>
 
                           {/* <input type="submit" class="submitBtn" value="Guardar" onClick={handleClose} /> */}
-                          <Button onClick={handleClose}>Guardar</Button>
+                          <button
+                            className="m-2 btn btn-primary"
+                            onClick={guardarData}
+                          >
+                            Guardar
+                          </button>
+                          <button
+                            className="m-2 btn btn-danger"
+                            onClick={handleClose}
+                          >
+                            Cancelar
+                          </button>
                         </form>
                       </div>
                     </div>
@@ -193,8 +296,15 @@ function Profile() {
       ) : (
         <div className="w-100 vh-100 bg-white">
           <NavBar></NavBar> <br /> <br /> <br /> <br />
-        <h1 className="text-dark mt-5 d-flex align-items-center justify-content-center">Debes iniciar sesión para acceder a esta página</h1>
-        <h3 onClick={()=>navigate("/login")} className="text-dark mt-5 d-flex align-items-center justify-content-center"><a href="#">Ir a login</a></h3>
+          <h1 className="text-dark mt-5 d-flex align-items-center justify-content-center">
+            Debes iniciar sesión para acceder a esta página
+          </h1>
+          <h3
+            onClick={() => navigate("/login")}
+            className="text-dark mt-5 d-flex align-items-center justify-content-center"
+          >
+            <a href="#">Ir a login</a>
+          </h3>
         </div>
       )}
     </>

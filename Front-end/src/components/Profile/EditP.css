@@ -38,6 +38,9 @@
     width: 90%;
     margin-bottom: 17px;
 }
+.inputContainer.input::placeholder {
+  color: #000;
+}
 
 .input {
     position: absolute;
@@ -66,7 +69,7 @@
     left: 15px;
     padding: 0 4px;
     background-color: white;
-    color: #DADCE0;
+    color: #7a7a7a;
     font-size: 16px;
     transition: 0.5s;
     z-index: 0;
@@ -100,7 +103,7 @@
   }
 
   .input:focus {
-    border: 2px solid purple;
+    border: 2px solid rgb(9, 0, 128);
   }
 
   .input:not(:placeholder-shown)+ .label {

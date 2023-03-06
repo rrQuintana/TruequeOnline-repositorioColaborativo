@@ -83,7 +83,7 @@
     left: 15px;
     padding: 0 4px;
     background-color: white;
-    color: #DADCE0;
+    color: #a7a7a7;
     font-size: 16px;
     transition: 0.5s;
     z-index: 0;
@@ -113,11 +113,11 @@
     z-index: 10;
     font-size: 14px;
     font-weight: 600;
-    color: purple;
+    color: rgb(38, 0, 128);
   }
 
   .input:focus {
-    border: 2px solid purple;
+    border: 2px solid rgb(38, 0, 128);
   }
 
   .input:not(:placeholder-shown)+ .label {
