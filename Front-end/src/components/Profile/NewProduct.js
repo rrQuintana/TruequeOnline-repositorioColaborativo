@@ -49,12 +49,13 @@ function NewProduct() {
 
       setPublicacion({ ...Publicacion });
       window.alert("Publicación guardada ", publicacion.titulo);
+      navigate("/profile");
     } catch (e) {
       window.alert("Error al guardar publicación");
     }
   };
 
-  //Funcion para guardar datos en la base de datos
+  ///!!!!!!!!!!!!! NO BORRAR !!!!!!!!!!!!!!!!!!!!!!!!!!!!
   async function Guardar() {
     try {
       const docRef = await addDoc(collection(db, "productos"), {
@@ -68,6 +69,7 @@ function NewProduct() {
       console.error("Error adding document: ", e);
     }
   }
+  ///!!!!!!!!!!!!! SI ESTA FUNCIÓN SE BORRA SE CAE EL BACKEND 
 
   return (
     <div>

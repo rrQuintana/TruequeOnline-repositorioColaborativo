@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import backgroundImage from "./background.jpg";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +19,8 @@ function Login() {
   const { setIsAuthenticated } = useContext(AuthContext);
   const { setUser } = useContext(AuthContext);
   const { setUserData } = useContext(AuthContext);
+
+  const { userData } = useContext(AuthContext);
 
   //Constructor para usuario default
   const Usuario = {
@@ -63,7 +65,6 @@ function Login() {
 
     setUsuario({...Usuario});
     Registrar();
-    setUserData(newUser);
   };
 
   //Crear un usuario
@@ -88,7 +89,7 @@ function Login() {
       .catch((error) => {
         const errorMessage = error.message;
         errorMessage ===
-        "Firebase: Password should be at least 6 characters (auth/weak-password)."
+          "Firebase: Password should be at least 6 characters (auth/weak-password)."
           ? setErrMessage("La contraseña tiene que ser mayor a 6 caracteres")
           : errorMessage === "Firebase: Error (auth/email-already-in-use)."
           ? setErrMessage("Correo en uso")
@@ -101,16 +102,12 @@ function Login() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     const auth = getAuth();
+    
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
-        const user = userCredential.user;
-        // ...
-        setIsAuthenticated(true);
-        setUser(user);
+        CargarDatos(userCredential.user);
         navigate("/");
-        CargarDatos(user);
-
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -123,13 +120,18 @@ function Login() {
   }
 
   //Cargar datos del usuario a todos los componentes
-  async function CargarDatos(user){            
-    console.log('Datos firebase:',user)
+  async function CargarDatos(user){   
     const campoBuscado = user.email; //Correo del usuario      
     const res = await axios.get(`http://localhost:4000/api/usuarios/${campoBuscado}`)
     const InfoUsuario = res.data
-    console.log('Datos mongo: ',InfoUsuario)
+
     setUserData(InfoUsuario)
+    setUser(user);    
+    setIsAuthenticated(true); 
+    console.log("userData: ",InfoUsuario)
+
+    //guardar usuario en memoria local
+    localStorage.setItem("email", JSON.stringify(InfoUsuario.email));
   }
 
   return (

@@ -1,8 +1,8 @@
 const usuarioCtrl = {};
-
 const Usuario = require("../Models/usuario.model");
 const Publicacion = require('../Models/publicacion.model');
 const Comentario = require('../Models/comentario.model');
+
 
 ///////////////////////////////[ CRUD DE USUARIOS ]//////////////////////////////////// 
 
@@ -31,7 +31,13 @@ usuarioCtrl.createUser = async (req, res) => {
   res.json({ message: "Usuario creado: ", newUser });
 };
 
-//Obtener datos de un usuario
+//Obtener datos de un usuario por id
+usuarioCtrl.getUsuarioById = async (req, res) => {
+  const usuario = await Usuario.findById(req.params.id)
+  res.json(usuario);
+};
+
+//Obtener datos de un usuario por email
 usuarioCtrl.getUsuario = async (req, res) => {
   const usuario = await Usuario.findOne({ email: req.params.email })
   res.json(usuario);
