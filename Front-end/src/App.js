@@ -1,6 +1,6 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./AuthContext";
 import LandingPage from "./components/LandingPage/LandingPage";
@@ -12,34 +12,13 @@ import Aos from "aos";
 import NewProduct from "./components/Profile/NewProduct";
 import Login from "./components/Login/Login";
 import ProductPage from "./components/Products/ProductPage";
-import axios from "axios";
-import { AuthContext } from "./AuthContext";
 
-function App() {
-  const { isAuthenticated } = useContext(AuthContext); //Saber de forma global si hay un usuario autenticado
-  const { setIsAuthenticated } = useContext(AuthContext);
-  const { setUserData } = useContext(AuthContext);
+function App() {  
 
   useEffect(() => {
     //Animaciones para la página
     Aos.init({ duration: 2000 });
-
-    //Extraer datos del usuario de la memoria local
-    const extraerDatos = async () => {
-      if (localStorage.getItem("email")) {
-        setIsAuthenticated(true);
-        const email = localStorage.getItem("email").replace(/['"]+/g, '');
-        console.log(email);
-        const res = await axios.get(
-          `http://localhost:4000/api/usuarios/${email}`
-        );
-        let InfoUsuario = res.data        
-      }
-    };
-    extraerDatos();    
   }, []);
-
-  console.log("isAuthenticated: ", isAuthenticated);
 
   return (
     <div className="App">

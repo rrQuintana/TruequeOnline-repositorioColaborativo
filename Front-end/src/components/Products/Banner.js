@@ -62,7 +62,7 @@ export const Banner = () => {
       <NavBar></NavBar>
       
       <section
-        className="products-banner h-custom vh-100 d-flex justify-content-center align-items-center "
+        className="products-banner h-custom vh-100 d-flex justify-content-center align-items-center"
         id="home"
       >
         <Container

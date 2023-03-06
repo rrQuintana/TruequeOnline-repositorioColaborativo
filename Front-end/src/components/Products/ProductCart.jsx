@@ -4,7 +4,7 @@ import imagen from "../../assets/img/img-prod.png";
 
 function ProductCart({_id, titulo, contenido, categoria, precio}) {
   return (
-    <Link to={"/ProductPage/" + _id} style={{ textDecoration: "none" }} target="_blank">
+    <Link to={"/ProductPage/" + _id} style={{ textDecoration: "none" }}>
       <div className=" product-bx d-flex row flex-wrap justify-content-center align-items-center">
         <div className="product-img-container my-2 d-flex flex-wrap justify-content-center align-items-center">
           <img src={imagen} alt="imagen producto" />

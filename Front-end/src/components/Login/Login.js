@@ -45,7 +45,6 @@ function Login() {
   //Funcion para guardar los datos del usuario en mongo
   const guardarData = async (e) => {
     e.preventDefault();
-
     //Meter datos ingresados en 
     const newUser = {
       nombre: usuario.nombre,
@@ -58,11 +57,8 @@ function Login() {
       calificacion: usuario.calificacion,
       reportes: usuario.reportes,
     }
-    console.log(newUser)
-
     //Crear función post de los datos
     await axios.post("http://localhost:4000/api/usuarios", newUser)
-
     setUsuario({...Usuario});
     Registrar();
   };
@@ -76,14 +72,11 @@ function Login() {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-
         //Alerta de registro exitoso
         window.alert(user.email + " registrado con exito");
-
         //Limpiar los inputs
         document.getElementById("usuario-email").value = "";
         document.getElementById("usuario-password").value = "";
-
         setRegistro(!registro);
       })
       .catch((error) => {
@@ -97,12 +90,12 @@ function Login() {
       });
   }
 
+  
   //Ingresar usuario
   function Ingresar() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     const auth = getAuth();
-    
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
@@ -118,18 +111,14 @@ function Login() {
         console.log(ErrMessage);
       });
   }
-
   //Cargar datos del usuario a todos los componentes
   async function CargarDatos(user){   
     const campoBuscado = user.email; //Correo del usuario      
     const res = await axios.get(`http://localhost:4000/api/usuarios/${campoBuscado}`)
     const InfoUsuario = res.data
-
     setUserData(InfoUsuario)
     setUser(user);    
     setIsAuthenticated(true); 
-    console.log("userData: ",InfoUsuario)
-
     //guardar usuario en memoria local
     localStorage.setItem("email", JSON.stringify(InfoUsuario.email));
   }
@@ -161,7 +150,6 @@ function Login() {
                   Regresar
                 </a>
               </div>
-
               <br />
               {registro ? (
                 <>
