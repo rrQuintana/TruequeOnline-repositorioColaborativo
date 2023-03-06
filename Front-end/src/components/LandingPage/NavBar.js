@@ -43,7 +43,6 @@ export const NavBar = (props) => {
       const correoEnMemoria = localStorage
         .getItem("email")
         .replace(/['"]+/g, "");
-      extraerDatos(correoEnMemoria);
       const res = await axios.get(
         `http://localhost:4000/api/usuarios/${correoEnMemoria}`
       );
