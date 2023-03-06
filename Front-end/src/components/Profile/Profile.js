@@ -178,7 +178,7 @@ function Profile() {
                         Eliminar
                       </button>
                       <Link
-                        to={`/editar/publicacion/${list._id}`}
+                        to={`/ProductEdit/${list._id}`}
                         className="btn-primary"
                       >
                         Editar

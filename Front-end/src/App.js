@@ -15,6 +15,7 @@ import ProductPage from "./components/Products/ProductPage";
 import Commennt from "./components/Products/Comennt";
 import axios from "axios";
 import { AuthContext } from "./AuthContext";
+import ProductEdit from "./components/Products/ProductEdit";
 
 function App() {  
 
@@ -37,6 +38,7 @@ function App() {
             <Route path="/newProduct" element={<NewProduct />} />
             <Route path="/ProductPage" element={<ProductPage />} />
             <Route path="/Comment" element={<Commennt />} />
+            <Route path="/ProductEdit/:id" element={<ProductEdit />}/>
             <Route path="*" element={<Error404 />} />
           </Routes>
         </BrowserRouter>

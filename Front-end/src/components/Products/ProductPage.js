@@ -5,20 +5,6 @@ import "./ProductP.css";
 import axios from "axios";
 import { AuthContext } from "../../AuthContext";
 
-import { createTheme } from "@mui/material/styles";
-import { height } from "@mui/system";
-
-const theme = createTheme({
-  status: {
-    success: "#DCFFC7",
-  },
-  palette: {
-    success: {
-      main: "#DCFFC7",
-      darker: "#DCFFC7",
-    },
-  },
-});
 
 function ProductPage() {
   const { UserData } = useContext(AuthContext);

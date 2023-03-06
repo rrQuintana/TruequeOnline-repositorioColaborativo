@@ -35,13 +35,14 @@ publicacionCtrl.deletePost = async (req, res) => {
 };
 
 publicacionCtrl.updatePost = async (req, res) => {
-    const { titulo, contenido, autor } = req.body;
+    const { titulo, contenido, categoria, precio } = req.body;
     await Publicacion.findByIdAndUpdate(req.params.id, {
-        titulo,
-        contenido,
-        autor
+        titulo: titulo,
+        contenido: contenido,
+        categoria: categoria,
+        precio: precio,
     });
-    res.json({ message: 'Publicacion actualizada' });
+    res.json({ message: 'Publicacion actualizada con Exito!!!' });
 };
 
 ////////////////////////////////////////////////////////////////
