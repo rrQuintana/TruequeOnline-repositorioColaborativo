@@ -10,6 +10,7 @@ const usuarioSchema = new Schema({
     foto: String,
     calificacion: String,
     reportes: Number,
+    estatus: Number, // 0: Admin, 1: Activo, 2: Vendedor 3: Inactivo
 },
 {
     timestamps: true,

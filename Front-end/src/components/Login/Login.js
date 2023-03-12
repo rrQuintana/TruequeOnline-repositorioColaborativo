@@ -8,7 +8,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { AuthContext } from "../../AuthContext";
-import axios from "axios"
+import axios from "axios";
 
 function Login() {
   const [registro, setRegistro] = useState(true); //Manejadores de estado para registrar o logear
@@ -20,7 +20,8 @@ function Login() {
   const { setUser } = useContext(AuthContext);
   const { setUserData } = useContext(AuthContext);
 
-  const { userData } = useContext(AuthContext);
+  const [password, setPassword] = useState("");
+  const [strength, setStrength] = useState(0);
 
   //Constructor para usuario default
   const Usuario = {
@@ -33,6 +34,7 @@ function Login() {
     foto: "",
     calificacion: "Sin calificación",
     reportes: 0,
+    estatus: 1,
   };
   const [usuario, setUsuario] = useState(Usuario);
 
@@ -45,7 +47,7 @@ function Login() {
   //Funcion para guardar los datos del usuario en mongo
   const guardarData = async (e) => {
     e.preventDefault();
-    //Meter datos ingresados en 
+    //Meter datos ingresados en
     const newUser = {
       nombre: usuario.nombre,
       apellido: usuario.apellido,
@@ -56,11 +58,16 @@ function Login() {
       foto: usuario.foto,
       calificacion: usuario.calificacion,
       reportes: usuario.reportes,
+      estatus: usuario.estatus,
+    };
+    if (strength >= 4) {
+      //Crear función post de los datos
+      await axios.post("http://localhost:4000/api/usuarios", newUser);
+      setUsuario({ ...Usuario });
+      Registrar();
+    } else {
+      window.alert("La contraseña no es segura");
     }
-    //Crear función post de los datos
-    await axios.post("http://localhost:4000/api/usuarios", newUser)
-    setUsuario({...Usuario});
-    Registrar();
   };
 
   //Crear un usuario
@@ -68,6 +75,7 @@ function Login() {
     const email = document.getElementById("usuario-email").value;
     const password = document.getElementById("usuario-password").value;
     const auth = getAuth();
+
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
@@ -82,7 +90,7 @@ function Login() {
       .catch((error) => {
         const errorMessage = error.message;
         errorMessage ===
-          "Firebase: Password should be at least 6 characters (auth/weak-password)."
+        "Firebase: Password should be at least 6 characters (auth/weak-password)."
           ? setErrMessage("La contraseña tiene que ser mayor a 6 caracteres")
           : errorMessage === "Firebase: Error (auth/email-already-in-use)."
           ? setErrMessage("Correo en uso")
@@ -90,7 +98,6 @@ function Login() {
       });
   }
 
-  
   //Ingresar usuario
   function Ingresar() {
     const email = document.getElementById("email").value;
@@ -112,16 +119,38 @@ function Login() {
       });
   }
   //Cargar datos del usuario a todos los componentes
-  async function CargarDatos(user){   
-    const campoBuscado = user.email; //Correo del usuario      
-    const res = await axios.get(`http://localhost:4000/api/usuarios/${campoBuscado}`)
-    const InfoUsuario = res.data
-    setUserData(InfoUsuario)
-    setUser(user);    
-    setIsAuthenticated(true); 
+  async function CargarDatos(user) {
+    const campoBuscado = user.email; //Correo del usuario
+    const res = await axios.get(
+      `http://localhost:4000/api/usuarios/${campoBuscado}`
+    );
+    const InfoUsuario = res.data;
+    setUserData(InfoUsuario);
+    setUser(user);
+    setIsAuthenticated(true);
     //guardar usuario en memoria local
     localStorage.setItem("email", JSON.stringify(InfoUsuario.email));
   }
+
+  function checkPasswordStrength(password) {
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[!@#$%^&*]/.test(password)) score++;
+    return score;
+  }
+
+  const strengthClass =
+    strength < 2 ? "weak" : strength < 4 ? "medium" : "strong";
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    checkPasswordStrength(e.target.value);
+    const strength = checkPasswordStrength(password);
+    setStrength(strength);
+  };
 
   return (
     <div
@@ -256,16 +285,23 @@ function Login() {
 
                     <Form.Group>
                       <h5 className="text-secondary mt-4">Contraseña*</h5>
+                      <p className="text-secondary">
+                        Debe ser mayor a 6 caracteres, incluir caracteres
+                        peciales, números y mayúsculas.
+                      </p>
                       <Form.Control
                         id="usuario-password"
                         name="password"
                         type="password"
                         placeholder="Password"
+                        value={password}
+                        onChange={handlePasswordChange}
+                        className={`password-input ${strengthClass}`}
                         required
                       />
                     </Form.Group>
 
-                    <p className="text-danger mt-2" id="error-message">
+                    <p className="text-danger mt-3" id="error-message">
                       {ErrMessage}
                     </p>
 

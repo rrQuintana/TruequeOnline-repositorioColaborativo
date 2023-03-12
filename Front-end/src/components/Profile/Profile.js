@@ -33,6 +33,14 @@ function Profile() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const [openUpdateStatus, setOpenUpdateStatus] = React.useState(false);
+  const handleOpenUpdateStatus = () => setOpenUpdateStatus(true);
+  const handleCloseUpdateStatus = () => setOpenUpdateStatus(false);
+
+  const [openAddP, setOpenAddP] = React.useState(false);
+  const handleOpenAddP = () => setOpenAddP(true);
+  const handleCloseAddP = () => setOpenAddP(false);
+
   const [lista, setLista] = useState([]);
 
   useEffect(() => {
@@ -48,10 +56,18 @@ function Profile() {
     }
   }, [lista]);
 
+  const getPubliaciones = async () => {
+    const res = await axios.get(
+      `http://localhost:4000/api/publicaciones/buscar/${UserData._id}`
+    );
+    setLista(res.data);
+  };
+
   const eliminarProducto = async (id) => {
     window.confirm("¿Está seguro de eliminar este producto?")
       ? await axios.delete(`http://localhost:4000/api/publicaciones/${id}`)
       : window.alert("No se eliminó el producto");
+    getPubliaciones();
   };
 
   const Usuario = {
@@ -64,6 +80,7 @@ function Profile() {
     foto: UserData.foto,
     calificacion: UserData.calificacion,
     reportes: UserData.reportes,
+    estatus: UserData.estatus,
   };
   const [usuario, setUsuario] = useState(Usuario);
 
@@ -88,6 +105,7 @@ function Profile() {
         foto: usuario.foto,
         calificacion: usuario.calificacion,
         reportes: usuario.reportes,
+        estatus: usuario.estatus,
       };
       try {
         //Crear función post de los datos
@@ -113,183 +131,408 @@ function Profile() {
       <NavBar></NavBar>
 
       {isAuthenticated ? (
-        <div className="bg-secondary vh-100 h-custom d-flex row justify-content-center align-items-center">
+        <div className="bg-white d-flex row">
           <div className="container">
-            <Row className="bg-dark py-4">
+            <Row className="vh-100 h-custom d-flex justify-content-center align-items-center">
               <Col
-                md={6}
+                md={4}
                 className="d-flex row justify-content-center align-items-center"
               >
                 <Image
                   src={UserData.foto ? UserData.foto : DefaultUserIcon}
+                  className="mb-2"
                   alt="profile pic"
-                  style={{ width: "220px", height: "200px" }}
+                  style={{ width: "320px", height: "300px" }}
                   roundedCircle
                 />
+                <button
+                  className="btn btn-secondary mt-2 w-50"
+                  onClick={handleOpen}
+                >
+                  Editar Perfil
+                </button>
               </Col>
               <Col
-                md={6}
+                md={5}
                 className="d-flex row justify-content-center align-items-center"
               >
-                <p>{UserData.calificacion}</p>
-                <h1>{UserData.nombre + " " + UserData.apellido}</h1>
-                <h3 className="mb-5">{UserData.email}</h3>
-                <p>Teléfono: {UserData.telefono}</p>
-                <p>Ubicación: {UserData.direccion}</p>
-                <p>Contacto: {UserData.contacto}</p>
-                <Button variant="contained">
-                  <Link className="text-white" to="/newProduct">
-                    Subir un producto
-                  </Link>
-                </Button>
-                <Button onClick={handleOpen} color="error">
-                  Editar Perfil
-                </Button>
-                <Modal open={open} onClose={handleClose}>
-                  <Box>
-                    <div class="todo">
-                      <div class="signupFrm">
-                        <form action="" class="form" onSubmit={guardarData}>
-                          <h2 className="text-secondary">Editar perfil</h2>
-                          <div class="inputContainer">
-                            <input
-                              type="text"
-                              class="input text-black"
-                              placeholder="a"
-                              name="nombre"
-                              onChange={capturarData}
-                            />
-                            <label for="" class="label">
-                              Nombre
-                            </label>
-                          </div>
+                <div className="ms-5">
+                  {UserData.estatus == 2 && (
+                    <p className="text-black" style={{ marginBottom: 0 }}>
+                      {UserData.calificacion}
+                    </p>
+                  )}
 
-                          <div class="inputContainer">
-                            <input
-                              type="text"
-                              class="input"
-                              placeholder="a"
-                              name="apellido"
-                              onChange={capturarData}
-                            />
-                            <label for="" class="label">
-                              Apellido
-                            </label>
-                          </div>
-
-                          <div class="inputContainer">
-                            <input
-                              type="text"
-                              class="input"
-                              placeholder="a"
-                              name="foto"
-                              onChange={capturarData}
-                            />
-                            <label for="" class="label">
-                              Foto
-                            </label>
-                          </div>
-
-                          <div class="inputContainer">
-                            <input
-                              type="text"
-                              class="input"
-                              placeholder="a"
-                              name="telefono"
-                              onChange={capturarData}
-                            />
-                            <label for="" class="label">
-                              Telefono
-                            </label>
-                          </div>
-
-                          <div class="inputContainer">
-                            <input
-                              type="text"
-                              class="input"
-                              placeholder="a"
-                              name="direccion"
-                              onChange={capturarData}
-                            />
-                            <label for="" class="label">
-                              Direccion
-                            </label>
-                          </div>
-
-                          <div class="inputContainer">
-                            <input
-                              type="text"
-                              class="input"
-                              placeholder="a"
-                              name="contacto"
-                              onChange={capturarData}
-                            />
-                            <label for="" class="label">
-                              Contacto
-                            </label>
-                          </div>
-
-                          {/* <input type="submit" class="submitBtn" value="Guardar" onClick={handleClose} /> */}
-                          <button
-                            className="m-2 btn btn-primary"
-                            onClick={guardarData}
-                          >
-                            Guardar
-                          </button>
-                          <button
-                            className="m-2 btn btn-danger"
-                            onClick={handleClose}
-                          >
-                            Cancelar
-                          </button>
-                        </form>
-                      </div>
-                    </div>
-                  </Box>
-                </Modal>
-              </Col>
-              <div>
-                <h1 className="m-5">Mis productos:</h1>
-                <div className="container-fluid d-flex m-3 flex-wrap justify-content-center align-items-center">
-                  {lista.map((list) => (
-                    <div
-                      className="product-bx d-flex row flex-wrap justify-content-center align-items-center"
-                      key={list._id}
-                    >
-                      <div className="product-img-container my-2 d-flex flex-wrap justify-content-center align-items-center">
-                        <img src={DefaultUserIcon} alt="imagen producto" />
-                      </div>
-                      <h4 className="product-bx-h d-flex flex-wrap justify-content-center align-items-center">
-                        {list.titulo}
+                  <h1 className="text-black" style={{ marginBottom: 0 }}>
+                    {UserData.nombre + " " + UserData.apellido}
+                  </h1>
+                  <h4 className="mb-5 text-secondary">{UserData.email}</h4>
+                  {UserData.estatus != 2 ? (
+                    <>
+                      <h4
+                        className="text-black text-bold"
+                        style={{ marginTop: -30, marginBottom: -10 }}
+                      >
+                        Información personal:
                       </h4>
-                      <div className="product-bx-p-description">
-                        {list.contenido}
-                      </div>
-                      <p className="product-bx-p mt-2 d-flex flex-wrap justify-content-center align-items-center">
-                        Acepta artículos de:
-                      </p>
-                      <div className="product-items-box d-flex flex-wrap justify-content-center align-items-center">
-                        <span>{list.precio}</span>
-                      </div>
-                      <p className="mt-2 product-bx-p-description d-flex flex-wrap justify-content-center align-items-center">
-                        Categoría: {list.categoria}
-                      </p>
+                      <li>
+                        <ul className="text-black">
+                          {">"} Teléfono: {UserData.telefono}
+                        </ul>
+                      </li>
+                      <h3 className="text-black text-bold">
+                        ¿Quieres intercambiar tus artículos?
+                      </h3>
+                      <h3>
+                        <a
+                          className="text-info"
+                          href="#"
+                          onClick={handleOpenUpdateStatus}
+                        >
+                          Completa esta información
+                        </a>
+                      </h3>
+                    </>
+                  ) : (
+                    <>
+                      <h4
+                        className="text-black text-bold"
+                        style={{ marginTop: -30, marginBottom: -10 }}
+                      >
+                        Información personal:
+                      </h4>
+                      <li>
+                        <ul className="text-black">
+                          {">"} Teléfono: {UserData.telefono}
+                        </ul>
+                        <ul className="text-black">
+                          {">"} Ubicación: {UserData.direccion}
+                        </ul>
+                        <ul className="text-black">
+                          {">"} Contacto: {UserData.contacto}
+                        </ul>
+                      </li>
                       <button
-                        className="btn-danger"
-                        onClick={() => eliminarProducto(list._id)}
+                        className="btn btn-primary mt-2"
+                        onClick={() => {
+                          navigate("newProduct");
+                        }}
                       >
-                        Eliminar
+                        Subir un producto
                       </button>
-                      <Link
-                        to={`/ProductEdit/${list._id}`}
-                        className="btn-primary"
-                      >
-                        Editar
-                      </Link>
-                    </div>
-                  ))}
+                    </>
+                  )}
+                  {/* Modal para editar perfil (la información que se edita depende del estatus del usurario)
+                      Si el usuario tiene permisos normales solo puede editar su nombre y telefono
+                      Si el usuario es vendedor puede editar otros datos */}
+                  <Modal open={open} onClose={handleClose}>
+                    <Box>
+                      <div class="todo">
+                        <div class="signupFrm">
+                          {UserData.estatus != 2 ? (
+                            <form action="" class="form" onSubmit={guardarData}>
+                              <h2 className="text-secondary">Editar perfil</h2>
+                              <div class="inputContainer">
+                                <input
+                                  type="text"
+                                  class="input text-black"
+                                  placeholder="a"
+                                  name="nombre"
+                                  onChange={capturarData}
+                                />
+                                <label for="" class="label">
+                                  Nombre
+                                </label>
+                              </div>
+
+                              <div class="inputContainer">
+                                <input
+                                  type="text"
+                                  class="input"
+                                  placeholder="a"
+                                  name="apellido"
+                                  onChange={capturarData}
+                                />
+                                <label for="" class="label">
+                                  Apellido
+                                </label>
+                              </div>
+
+                              <div class="inputContainer">
+                                <input
+                                  type="text"
+                                  class="input"
+                                  placeholder="a"
+                                  name="foto"
+                                  onChange={capturarData}
+                                />
+                                <label for="" class="label">
+                                  Foto
+                                </label>
+                              </div>
+
+                              <div class="inputContainer">
+                                <input
+                                  type="text"
+                                  class="input"
+                                  placeholder="a"
+                                  name="telefono"
+                                  onChange={capturarData}
+                                />
+                                <label for="" class="label">
+                                  Telefono
+                                </label>
+                              </div>
+                              <button
+                                className="m-2 btn btn-primary"
+                                onClick={guardarData}
+                              >
+                                Guardar
+                              </button>
+                              <button
+                                className="m-2 btn btn-danger"
+                                onClick={handleClose}
+                              >
+                                Cancelar
+                              </button>
+                            </form>
+                          ) : (
+                            <form action="" class="form" onSubmit={guardarData}>
+                              <h2 className="text-secondary">Editar perfil</h2>
+                              <div class="inputContainer">
+                                <input
+                                  type="text"
+                                  class="input text-black"
+                                  placeholder="a"
+                                  name="nombre"
+                                  onChange={capturarData}
+                                />
+                                <label for="" class="label">
+                                  Nombre
+                                </label>
+                              </div>
+
+                              <div class="inputContainer">
+                                <input
+                                  type="text"
+                                  class="input"
+                                  placeholder="a"
+                                  name="apellido"
+                                  onChange={capturarData}
+                                />
+                                <label for="" class="label">
+                                  Apellido
+                                </label>
+                              </div>
+
+                              <div class="inputContainer">
+                                <input
+                                  type="text"
+                                  class="input"
+                                  placeholder="a"
+                                  name="foto"
+                                  onChange={capturarData}
+                                />
+                                <label for="" class="label">
+                                  Foto
+                                </label>
+                              </div>
+
+                              <div class="inputContainer">
+                                <input
+                                  type="text"
+                                  class="input"
+                                  placeholder="a"
+                                  name="telefono"
+                                  onChange={capturarData}
+                                />
+                                <label for="" class="label">
+                                  Telefono
+                                </label>
+                              </div>
+
+                              <div class="inputContainer">
+                                <input
+                                  type="text"
+                                  class="input"
+                                  placeholder="a"
+                                  name="direccion"
+                                  onChange={capturarData}
+                                />
+                                <label for="" class="label">
+                                  Direccion
+                                </label>
+                              </div>
+
+                              <div class="inputContainer">
+                                <input
+                                  type="text"
+                                  class="input"
+                                  placeholder="a"
+                                  name="contacto"
+                                  onChange={capturarData}
+                                />
+                                <label for="" class="label">
+                                  Contacto
+                                </label>
+                              </div>
+
+                              {/* <input type="submit" class="submitBtn" value="Guardar" onClick={handleClose} /> */}
+                              <button
+                                className="m-2 btn btn-primary"
+                                onClick={guardarData}
+                              >
+                                Guardar
+                              </button>
+                              <button
+                                className="m-2 btn btn-danger"
+                                onClick={handleClose}
+                              >
+                                Cancelar
+                              </button>
+                            </form>
+                          )}
+                        </div>
+                      </div>
+                    </Box>
+                  </Modal>
+
+                  {/* Modal para cambiar permisos de usuario normal a vendedor donde se pide información y se actualiza el perfil*/}
+                  <Modal
+                    open={openUpdateStatus}
+                    onClose={handleCloseUpdateStatus}
+                  >
+                    <Box>
+                      <div class="todo">
+                        <div class="signupFrm">
+                          <form
+                            action=""
+                            class="formUpdate"
+                            onSubmit={guardarData}
+                          >
+                            <h2 className="text-secondary">
+                              Perfil de vendedor
+                            </h2>
+                            <p className="text-black mb-4">
+                              Para poder subir productos a la plataforma es
+                              importante estar autenticado y tener algunos datos
+                              de contacto.
+                            </p>
+
+                            <h5 className="text-black">
+                              Institución educativa:
+                            </h5>
+                            <p className="text-black">
+                              La direccion que se va a mostrar en tu perfil hace
+                              referencia a la isntitución educativa a la que
+                              perteneces así como el área en la que estudias,
+                              especifícala a continuación:
+                            </p>
+                            <div class="inputContainer">
+                              <input
+                                type="text"
+                                class="input"
+                                placeholder="a"
+                                name="direccion"
+                                onChange={capturarData}
+                                required
+                              />
+                              <label for="" class="label">
+                                Direccion
+                              </label>
+                            </div>
+                            <br />
+
+                            <h5 className="text-black">Contacto:</h5>
+                            <p className="text-black">
+                              En este apartado especifica cómo te gustaría que
+                              te contacten para realizar el intercambio, esta
+                              información no será mostrada en tu perfil público.                              
+                            </p>
+                            <p className="text-secondary">Ej. Whatsapp: 555 555 5555, Correo: email@mail.com</p>
+                            <div class="inputContainer">
+                              <input
+                                type="text"
+                                class="input"
+                                placeholder="a"
+                                name="contacto"
+                                onChange={capturarData}
+                                required
+                              />
+                              <label for="" class="label">
+                                Contacto
+                              </label>
+                            </div>
+                            <button
+                              className="m-2 btn btn-primary"
+                              onClick={() => {
+                                setUsuario({ estatus: 2 });
+                                guardarData();
+                              }}
+                            >
+                              Guardar
+                            </button>
+                            <button
+                              className="m-2 btn btn-danger"
+                              onClick={handleCloseUpdateStatus}
+                            >
+                              Cancelar
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                    </Box>
+                  </Modal>
                 </div>
-              </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={12}>
+                {UserData.estatus == 2 && (
+                  <div>
+                    <h1 className="m-5 text-black">Mis productos:</h1>
+                    <div className="container-fluid d-flex m-3 flex-wrap justify-content-center align-items-center">
+                      {lista.map((list) => (
+                        <div
+                          className="product-bx d-flex row flex-wrap justify-content-center align-items-center"
+                          key={list._id}
+                        >
+                          <div className="product-img-container my-2 d-flex flex-wrap justify-content-center align-items-center">
+                            <img src={DefaultUserIcon} alt="imagen producto" />
+                          </div>
+                          <h4 className="product-bx-h d-flex flex-wrap justify-content-center align-items-center">
+                            {list.titulo}
+                          </h4>
+                          <div className="product-bx-p-description">
+                            {list.contenido}
+                          </div>
+                          <p className="product-bx-p mt-2 d-flex flex-wrap justify-content-center align-items-center">
+                            Acepta artículos de:
+                          </p>
+                          <div className="product-items-box d-flex flex-wrap justify-content-center align-items-center">
+                            <span>{list.precio}</span>
+                          </div>
+                          <p className="mt-2 product-bx-p-description d-flex flex-wrap justify-content-center align-items-center">
+                            Categoría: {list.categoria}
+                          </p>
+                          <button
+                            className="btn-danger"
+                            onClick={() => eliminarProducto(list._id)}
+                          >
+                            Eliminar
+                          </button>
+                          <Link
+                            to={`/ProductEdit/${list._id}`}
+                            className="btn-primary"
+                          >
+                            Editar
+                          </Link>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </Col>
             </Row>
           </div>
         </div>

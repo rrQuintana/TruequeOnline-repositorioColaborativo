@@ -26,7 +26,7 @@ export const NavBar = (props) => {
   //Saber si se hizo scroll a la pagina para cambiar el estilo del nav
   useEffect(() => {
     const onScroll = () => {
-      if (window.scrollY > 100) {
+      if (window.scrollY > 10) {
         setScrolled(true);
       } else {
         setScrolled(false);

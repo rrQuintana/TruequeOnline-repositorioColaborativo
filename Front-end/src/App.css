@@ -14,7 +14,25 @@
 	src: url('./assets/font/CentraNo2-Book.ttf');
 	font-weight: 400;
 }
+.password-input {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  outline: none;
+}
 
+.password-input.weak {
+  border-color: red;
+}
+
+.password-input.medium {
+  border-color: orange;
+}
+
+.password-input.strong {
+  border-color: green;
+}
 /************ Default Css ************/
 * {
   margin: 0;
@@ -187,7 +205,7 @@ span.navbar-text {
 	transition: 0.3s ease-in-out;
 }
 .social-icon a:hover::before {
-    transform: scale(1);
+    transform: scale(0.5);
 }
 .social-icon a img {
 	width: 40%;
@@ -242,7 +260,7 @@ nav.navbar .navbar-toggler-icon {
   background-image: none;
   position: relative;
   border-bottom: 2px solid #fff;
-  transition: all 300ms linear;
+  transition: all 1s linear;
   top: -2px;
 }
 nav.navbar .navbar-toggler-icon:focus {
@@ -276,10 +294,11 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon:before {
 nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
 	border-color: transparent;
 }
-
+section{
+  margin-top: -10px !important; 
+}
 /************ Banner Css ************/
 .banner {
-  margin-top: 0;
   padding: 150px 0 100px 0;
   margin-top: 0;
   padding: 150px 0 100px 0;
