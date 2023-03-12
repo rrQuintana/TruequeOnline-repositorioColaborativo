@@ -23,7 +23,9 @@
     border-radius: 8px;
     padding: 20px 40px;
     box-shadow: 0 10px 25px rgba(92, 99, 105, .2);
- }
+}
+
+
   
 .title {
     font-size: 40px;
@@ -74,7 +76,6 @@
     transition: 0.5s;
     z-index: 0;
   }
-
   .submitBtn {
     display: block;
     margin-left: auto;
