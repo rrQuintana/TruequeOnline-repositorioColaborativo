@@ -9,6 +9,7 @@ const { getUser,
   deleteUser, 
   updateUser,
   comentariosPersona,
+  addReporte,
 } = require('../Controllers/usuario.controller');
 
 router.route('/')
@@ -23,12 +24,15 @@ router.route('/:email')
   .delete(deleteUser)
 
 router.route('/:id')
-  .put(updateUser)
+  .put(updateUser);
 
 router.route('/comentarios/:id')
-  .get(comentariosPersona)
+  .get(comentariosPersona);
 
 router.route('/publicaciones/:id')
-  .get(getUsuarioPublicaciones)
+  .get(getUsuarioPublicaciones);
+
+// router.route('/reporte/:id')
+//   .post(addReporte)
 
 module.exports = router;

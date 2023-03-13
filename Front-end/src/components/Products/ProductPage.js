@@ -4,15 +4,28 @@ import { NavBar } from "../LandingPage/NavBar";
 import "./ProductP.css";
 import axios from "axios";
 import { AuthContext } from "../../AuthContext";
+import Button from '@mui/material/Button';
 
 function ProductPage() {
   const { UserData } = useContext(AuthContext);
   const { isAuthenticated } = useContext(AuthContext); //Saber si el usuario está autenticado
 
   let { id } = useParams();
+  // let { idPersona } = useParams();
   const [publicacion, setPublicacion] = useState([]);
   const [autor, setAutor] = useState([]);
   const [lista, setLista] = useState([]);
+
+  function agregarReporte(){
+    axios.post("http://localhost:4000/api/publicaciones/reportes/" + id)
+    .then(response => {
+      console.log(response);
+      
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  }
 
   useEffect(() => {
     //Extraer la informacipon del producto y del autor
@@ -102,7 +115,7 @@ function ProductPage() {
                   <p className="pr-category cDCFFC7">{publicacion.precio}</p>
                 </div>
                 <h6 className="text-black mt-5">
-                  Descripcion de un producto:{" "}
+                  Descripcion del producto:{" "}
                 </h6>
                 <div className="pr-descr">
                   <p className="pp">{publicacion.contenido}</p>
@@ -124,6 +137,7 @@ function ProductPage() {
                 />
               </div>
             </div>
+            <Button id="agregarReporte()" onClick={agregarReporte} variant="outlined" color="error" className="butP">Reportar Publicacion</Button>
           </div>
         </div>
       </section>
@@ -146,6 +160,7 @@ function ProductPage() {
                       </div>
 
                       <p className="text-black">{product.contenido}</p>
+                      <Button id="agregarReporte()" variant="outlined" color="error" className="butE">Reportar</Button>
                       <hr className="text-black w-50 ms-2" />
                     </div>
                   </form>
@@ -169,7 +184,7 @@ function ProductPage() {
                 </button>
               </form>
             </div>
-            
+
           </div>
         </div>
       </section>

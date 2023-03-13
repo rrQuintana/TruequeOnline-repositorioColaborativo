@@ -87,4 +87,13 @@ publicacionCtrl.getUsuariosComentariosPublicacion = async (req, res) => {
   }
 };
 
+publicacionCtrl.addReporte = async (req, res) => {
+  Publicacion.updateOne({ publicacion: req.params.id}, {$inc: {reportes: 1}}, (err, res) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    console.log("Reporte agregado a Publicacion");
+  });
+};
+
 module.exports = publicacionCtrl;

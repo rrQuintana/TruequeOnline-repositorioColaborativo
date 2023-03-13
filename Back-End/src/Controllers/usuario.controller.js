@@ -120,4 +120,24 @@ usuarioCtrl.comentariosPersona = (req, res) => {
     });
 };
 
+//Agregar un reporte a un usuario
+// usuarioCtrl.addReporte = async (req, res) => {
+//   const { reportes } = req.body;
+//   await Usuario.updateOne(req.params.id, {
+//     reportes: reportes,
+//   });
+//   res.json({ message: "Reporte agregado" });
+// };
+
+// usuarioCtrl.addReporte = async (req, res) => {
+//   const idPersona = req.params.id;
+
+//   Usuario.updateOne({persona: idPersona}, {$inc: {reportes: 1}}, (err, res) => {
+//     if (err) {
+//       return res.status(500).json({ error: err.message });
+//     }
+//     res.json({ message: "Reporte agregado" });
+//   });
+// }
+
 module.exports = usuarioCtrl;

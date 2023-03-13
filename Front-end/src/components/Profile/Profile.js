@@ -11,18 +11,6 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  // bgcolor: 'black',
-  // border: '2px solid #000',
-  // boxShadow: 24,
-  color: "transparent",
-  p: 4,
-};
 
 function Profile() {
   const navigate = useNavigate();
@@ -471,7 +459,7 @@ function Profile() {
                             </h5>
                             <p className="text-black">
                               La direccion que se va a mostrar en tu perfil hace
-                              referencia a la isntitución educativa a la que
+                              referencia a la institución educativa a la que
                               perteneces así como el área en la que estudias,
                               especifícala a continuación:
                             </p>
