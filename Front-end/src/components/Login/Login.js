@@ -60,13 +60,13 @@ function Login() {
       reportes: usuario.reportes,
       estatus: usuario.estatus,
     };
-    const numero = document.getElementById("password")
+    const numero = document.getElementById("usuario-telefono")
     const esNumero = /^\d+$/.test(numero);
-    if (!esNumero) {
+    if (esNumero) {
       alert("Por favor ingrese de teléfono número válido");
-      numero.value = ""; // Limpiamos el input en caso de que se haya ingresado un valor no numérico
-    } else {
-      alert("Número válido");
+      numero.value=""; // Limpiamos el input en caso de que se haya ingresado un valor no numérico
+    }else{
+      console.log("Datos validados")
     }
     if (strength >= 4) {
       //Crear función post de los datos
