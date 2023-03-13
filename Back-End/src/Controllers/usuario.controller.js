@@ -120,24 +120,23 @@ usuarioCtrl.comentariosPersona = (req, res) => {
     });
 };
 
-//Agregar un reporte a un usuario
-// usuarioCtrl.addReporte = async (req, res) => {
-//   const { reportes } = req.body;
-//   await Usuario.updateOne(req.params.id, {
-//     reportes: reportes,
-//   });
-//   res.json({ message: "Reporte agregado" });
-// };
+usuarioCtrl.addReporte = async (req, res) => {
+  const idUsuario = req.params.idUsuario;
+  const idComentario = req.params.idComentario;
 
-// usuarioCtrl.addReporte = async (req, res) => {
-//   const idPersona = req.params.id;
+  const usuario = await Usuario.findById(idUsuario);
+  if (!usuario) {
+    return res.status(404).json({ error: 'Usuario no encontrado' });
+  }
 
-//   Usuario.updateOne({persona: idPersona}, {$inc: {reportes: 1}}, (err, res) => {
-//     if (err) {
-//       return res.status(500).json({ error: err.message });
-//     }
-//     res.json({ message: "Reporte agregado" });
-//   });
-// }
+  usuario.reportes += 1;
+  usuario.save((err, result) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ message: "Reporte agregado a usuario" });
+  });
+}
+
 
 module.exports = usuarioCtrl;

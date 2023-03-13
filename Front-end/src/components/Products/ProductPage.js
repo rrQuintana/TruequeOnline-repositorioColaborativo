@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { NavBar } from "../LandingPage/NavBar";
 import "./ProductP.css";
 import axios from "axios";
@@ -16,17 +16,27 @@ function ProductPage() {
   const [autor, setAutor] = useState([]);
   const [lista, setLista] = useState([]);
 
-  function agregarReporte(){
+  function agregarReporte() {
     axios.post("http://localhost:4000/api/publicaciones/reportes/" + id)
-    .then(response => {
-      console.log(response);  
-    })
-    .catch(error => {
-      console.log(error);
-    });
+      .then(response => {
+        console.log(response);
+        
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    window.alert("Reporte a publicacion exitoso!!");
   }
 
-
+  const reportComent = async (userId, commentId) => {
+    try {
+      const response = await axios.put(`http://localhost:4000/api/usuarios/${userId}/reportes/${commentId}`);
+      console.log(response.data); 
+    } catch (error) {
+      console.error(error);
+    }
+    window.alert("Reporte a comentario exitoso!!");
+  };
 
   useEffect(() => {
     //Extraer la informacipon del producto y del autor
@@ -161,7 +171,7 @@ function ProductPage() {
                       </div>
 
                       <p className="text-black">{product.contenido}</p>
-                      {/* <Button onClick={reportComent} variant="outlined" color="error" className="butE">Reportar</Button> */}
+                      <Button onClick={() => reportComent(product.autor, product._id)} variant="outlined" color="error" className="butE">Reportar</Button>
                       <hr className="text-black w-50 ms-2" />
                     </div>
                   </form>

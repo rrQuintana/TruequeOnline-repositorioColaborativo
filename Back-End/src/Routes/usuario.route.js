@@ -32,7 +32,7 @@ router.route('/comentarios/:id')
 router.route('/publicaciones/:id')
   .get(getUsuarioPublicaciones);
 
-// router.route('/reporte/:id')
-//   .post(addReporte)
+router.route('/:idUsuario/reportes/:idComentario').put(addReporte);
+
 
 module.exports = router;
