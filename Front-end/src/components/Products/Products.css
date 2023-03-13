@@ -42,6 +42,16 @@
   
 
   /********* Product list ****************/
+  .navBusqueda{
+    position: sticky !important;
+    top: 40px;
+  }
+  .buscarCategoria{
+    height: 32px;
+  }
+  .BusquedaIcon:hover{
+    color: #cccccc;
+  }
   .products-list{
     text-align: center;
     color: #ffffff;

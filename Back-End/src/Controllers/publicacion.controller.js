@@ -55,6 +55,13 @@ publicacionCtrl.buscarPublicaciones = async (req, res) => {
   res.json(publicaciones);
 };
 
+publicacionCtrl.getPublicacionesPorCategoria = async (req, res) => {
+  const categoria = req.params.categoria; // obtener la categoría de los parámetros de la solicitud
+  const publicaciones = await Publicacion.find({ categoria: categoria }); // buscar las publicaciones que corresponden a la categoría
+  res.json(publicaciones);
+};
+
+
 publicacionCtrl.getComentariosPublicacion = (req, res) => {
   Comentario.find({ publicacion: req.params.id })
     .populate('publicacion')

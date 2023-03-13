@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import imagen from "../../assets/img/img-prod.png";
+import "aos/dist/aos.css";
 
 function ProductCart({_id, titulo, contenido, categoria, precio, foto}) {
   return (
-    <Link to={"/ProductPage/" + _id} style={{ textDecoration: "none" }}>
+    <Link to={"/ProductPage/" + _id} style={{ textDecoration: "none" }} data-aos="fade-up">
       <div className=" product-bx d-flex row flex-wrap justify-content-center align-items-center">
         <div className="product-img-container my-2 d-flex flex-wrap justify-content-center align-items-center">
           <img src={foto} alt="imagen producto" style={{ width: 230, height: 230 }}/>
