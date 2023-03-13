@@ -19,13 +19,14 @@ function ProductPage() {
   function agregarReporte(){
     axios.post("http://localhost:4000/api/publicaciones/reportes/" + id)
     .then(response => {
-      console.log(response);
-      
+      console.log(response);  
     })
     .catch(error => {
       console.log(error);
     });
   }
+
+
 
   useEffect(() => {
     //Extraer la informacipon del producto y del autor
@@ -160,7 +161,7 @@ function ProductPage() {
                       </div>
 
                       <p className="text-black">{product.contenido}</p>
-                      <Button id="agregarReporte()" variant="outlined" color="error" className="butE">Reportar</Button>
+                      {/* <Button onClick={reportComent} variant="outlined" color="error" className="butE">Reportar</Button> */}
                       <hr className="text-black w-50 ms-2" />
                     </div>
                   </form>

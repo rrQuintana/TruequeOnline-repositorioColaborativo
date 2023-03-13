@@ -88,7 +88,7 @@ publicacionCtrl.getUsuariosComentariosPublicacion = async (req, res) => {
 };
 
 publicacionCtrl.addReporte = async (req, res) => {
-  Publicacion.updateOne({ publicacion: req.params.id}, {$inc: {reportes: 1}}, (err, res) => {
+  Publicacion.updateOne({ _id: req.params.id}, {$inc: {reportes: 1}}, (err, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
