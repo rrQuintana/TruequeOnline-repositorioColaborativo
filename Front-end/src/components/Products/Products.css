@@ -78,6 +78,9 @@
     font-size: 1.5em;
     color: #000000;
     margin-bottom: 2px;
+    overflow: hidden; /* oculta el texto que excede la altura */
+    text-overflow: ellipsis; /* agrega puntos suspensivos al final del tercer línea de texto */
+    white-space: nowrap; /* evita que el texto se divida en varias líneas */
   }
   .product-bx-p{
     font-size: .8em;

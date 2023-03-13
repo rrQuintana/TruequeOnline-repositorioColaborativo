@@ -5,16 +5,44 @@ import { collection, addDoc, query, getDocs } from "firebase/firestore";
 import { AuthContext } from "../../AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 function NewProduct() {
-  const navigate = useNavigate();
 
-  const { UserData } = useContext(AuthContext);
+  const navigate = useNavigate(); //Navegar entre links
+  const { UserData } = useContext(AuthContext); //datos del usuario
   const { isAuthenticated } = useContext(AuthContext);
+  const storage = getStorage(); //storage de firebase
+  const [imageUrl, setImageUrl] = useState(""); //url de imagen de firebase
+
+  //capturar datos para nueva publicación
+  const capturarData = (e) => {
+    const { name, value } = e.target;
+    setPublicacion({ ...publicacion, [name]: value });
+  };
+
+  //Guardar la imagen en firebase y obtener su link
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    const imagesRef = ref(
+      storage,
+      "productos/" +
+        publicacion.autor +
+        "/" +
+        publicacion.titulo +
+        "-" +
+        file.name
+    );
+    await uploadBytes(imagesRef, file);
+    const url = await getDownloadURL(imagesRef);
+    setImageUrl(url);
+  };
+
   //Manejadores de estado para publicaciones
   const Publicacion = {
     titulo: "",
     contenido: "",
+    foto: imageUrl,
     categoria: "",
     precio: "",
     reportes: 0,
@@ -22,19 +50,15 @@ function NewProduct() {
   };
   const [publicacion, setPublicacion] = useState(Publicacion);
 
-  const capturarData = (e) => {
-    const { name, value } = e.target;
-    setPublicacion({ ...publicacion, [name]: value });
-  };
-
+  //Guardar publicación
   const guardarData = async (e) => {
     e.preventDefault();
-
     try {
       //Crear función post
       const newPublicacion = {
         titulo: publicacion.titulo,
         contenido: publicacion.contenido,
+        foto: imageUrl,
         categoria: publicacion.categoria,
         precio: publicacion.precio,
         reportes: publicacion.reportes,
@@ -69,13 +93,13 @@ function NewProduct() {
       console.error("Error adding document: ", e);
     }
   }
-  ///!!!!!!!!!!!!! SI ESTA FUNCIÓN SE BORRA SE CAE EL BACKEND 
+  ///!!!!!!!!!!!!! SI ESTA FUNCIÓN SE BORRA SE CAE EL BACKEND
 
   return (
     <div>
       {isAuthenticated ? (
         <>
-        <NavBar></NavBar> <br /> <br /> <br /> <br />
+          <NavBar></NavBar> <br /> <br /> <br /> <br />
           <h1>Agregar productos</h1>
           <div className="w-50">
             <form onSubmit={guardarData}>
@@ -111,6 +135,21 @@ function NewProduct() {
               </div>
               <br />
 
+              <div className="input-group flex-nowrap">
+                <span className="input-group-text" id="addon-wrapping">
+                  Fotografía*
+                </span>
+                {imageUrl && <img src={imageUrl} alt="Uploaded image" style={{width: 300}}/>}
+                <input
+                  id="publicacion-foto"
+                  name="foto"
+                  type="file"
+                  onChange={handleFileChange}
+                  required
+                />                
+              </div>
+              <br />
+
               <div className="input-group mb-3">
                 <label className="input-group-text">Categoría*</label>
                 <select
@@ -119,17 +158,21 @@ function NewProduct() {
                   onChange={capturarData}
                   required
                 >
-                  <option value="">Seleccione una categoría</option>
-                  <option value="ropa">Ropa y accesorios</option>
-                  <option value="electrónica">Electrónica</option>
-                  <option value="hogar">Hogar y jardín</option>
-                  <option value="deportes">
-                    Deportes y actividades al aire libre
-                  </option>
-                  <option value="belleza">Belleza y cuidado personal</option>
-                  <option value="juguetes">Juguetes y juegos</option>
-                  <option value="alimentos">Alimentos y bebidas</option>
-                  <option value="animales">Animales y mascotas</option>
+                  <option value="Libros">Libros</option>
+                  <option value="Papelería">Papelería</option>
+                  <option value="Equipo escolar">Equipo escolar</option>
+                  <option value="Suministros escolares">Suministros escolares</option>
+                  <option value="Tecnología">Tecnología</option>
+                  <option value="Instrumentos musicales">Instrumentos musicales</option>
+                  <option value="Ropa">Ropa</option>
+                  <option value="Arte">Arte</option>
+                  <option value="Deportes">Deportes</option>
+                  <option value="Actividades físicas">Actividades físicas</option>
+                  <option value="Salud">Salud</option>
+                  <option value="Comida">Comida</option>
+                  <option value="Accesorios">Accesorios</option>
+                  <option value="Herramientas y equipo">Herramientas y equipo</option>
+                  <option value="Decoración y diseño">Decoración y diseño</option>
                 </select>
               </div>
 
@@ -147,18 +190,21 @@ function NewProduct() {
                   onChange={capturarData}
                   required
                 >
-                  <option value="">Yo quiero recibir..</option>
-                  <option value="">Dinero (especificar en descripción)</option>
-                  <option value="Ropa y accesorios">Ropa y accesorios</option>
-                  <option value="Electrónica">Electrónica</option>
-                  <option value="Hogar y jardín">Hogar y jardín</option>
-                  <option value="Deportes">
-                    Deportes y actividades al aire libre
-                  </option>
-                  <option value="Belleza">Belleza y cuidado personal</option>
-                  <option value="Juguetes">Juguetes y juegos</option>
-                  <option value="Alimentos">Alimentos y bebidas</option>
-                  <option value="Animales">Animales y mascotas</option>
+                  <option value="Libros">Libros</option>
+                  <option value="Papelería">Papelería</option>
+                  <option value="Equipo escolar">Equipo escolar</option>
+                  <option value="Suministros escolares">Suministros escolares</option>
+                  <option value="Tecnología">Tecnología</option>
+                  <option value="Instrumentos musicales">Instrumentos musicales</option>
+                  <option value="Ropa">Ropa</option>
+                  <option value="Arte">Arte</option>
+                  <option value="Deportes">Deportes</option>
+                  <option value="Actividades físicas">Actividades físicas</option>
+                  <option value="Salud">Salud</option>
+                  <option value="Comida">Comida</option>
+                  <option value="Accesorios">Accesorios</option>
+                  <option value="Herramientas y equipo">Herramientas y equipo</option>
+                  <option value="Decoración y diseño">Decoración y diseño</option>
                 </select>
               </div>
 
@@ -171,8 +217,15 @@ function NewProduct() {
       ) : (
         <div className="w-100 vh-100 bg-white">
           <NavBar></NavBar> <br /> <br /> <br /> <br />
-        <h1 className="text-dark mt-5 d-flex align-items-center justify-content-center">Debes iniciar sesión para acceder a esta página</h1>
-        <h3 onClick={()=>navigate("/login")} className="text-dark mt-5 d-flex align-items-center justify-content-center"><a href="#">Ir a login</a></h3>
+          <h1 className="text-dark mt-5 d-flex align-items-center justify-content-center">
+            Debes iniciar sesión para acceder a esta página
+          </h1>
+          <h3
+            onClick={() => navigate("/login")}
+            className="text-dark mt-5 d-flex align-items-center justify-content-center"
+          >
+            <a href="#">Ir a login</a>
+          </h3>
         </div>
       )}
     </div>

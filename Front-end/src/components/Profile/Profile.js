@@ -9,7 +9,7 @@ import "./Profile.css";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Button from "@mui/material/Button";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const style = {
   position: "absolute",
@@ -36,6 +36,7 @@ function Profile() {
   const [openUpdateStatus, setOpenUpdateStatus] = React.useState(false);
   const handleOpenUpdateStatus = () => setOpenUpdateStatus(true);
   const handleCloseUpdateStatus = () => setOpenUpdateStatus(false);
+  const [imageUrl, setImageUrl] = useState(UserData.foto);
 
   const [openAddP, setOpenAddP] = React.useState(false);
   const handleOpenAddP = () => setOpenAddP(true);
@@ -77,7 +78,7 @@ function Profile() {
     email: UserData.email,
     direccion: UserData.direccion,
     contacto: UserData.contacto,
-    foto: UserData.foto,
+    foto: imageUrl,
     calificacion: UserData.calificacion,
     reportes: UserData.reportes,
     estatus: UserData.estatus,
@@ -93,7 +94,6 @@ function Profile() {
   //Funcion para guardar los datos del usuario en mongo
   const guardarData = async (e) => {
     if (isAuthenticated) {
-      e.preventDefault();
       //Meter datos ingresados en
       const newUser = {
         nombre: usuario.nombre,
@@ -126,6 +126,23 @@ function Profile() {
     }
   };
 
+  const [showEditIcon, setShowEditIcon] = useState(false);
+  const storage = getStorage();
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    const imagesRef = ref(
+      storage,
+      "usaurios/" +
+      usuario.nombre +
+        "/" +
+        file.name
+    );
+    await uploadBytes(imagesRef, file);
+    const url = await getDownloadURL(imagesRef);
+    setImageUrl(url)
+    setUsuario({ foto: imageUrl });
+    guardarData();
+  };
   return (
     <>
       <NavBar></NavBar>
@@ -137,6 +154,8 @@ function Profile() {
               <Col
                 md={4}
                 className="d-flex row justify-content-center align-items-center"
+                onMouseEnter={() => setShowEditIcon(true)}
+                onMouseLeave={() => setShowEditIcon(false)}
               >
                 <Image
                   src={UserData.foto ? UserData.foto : DefaultUserIcon}
@@ -145,6 +164,34 @@ function Profile() {
                   style={{ width: "320px", height: "300px" }}
                   roundedCircle
                 />
+                {showEditIcon && (
+                  <>
+                    <div style={{
+                          color: "black",
+                          position: "absolute",
+                          top: 290,
+                          left: 340,
+                          with: 10,
+                        }}>
+                      <input
+                        type="file"
+                        name=""
+                        id=""
+                        style={{
+                          color: "black",
+                          position: "absolute",
+                          top: 10,
+                          left: -90,
+                          fontSize: 30,
+                          opacity: 0,
+                        }}
+                        onChange={handleFileChange}
+                      />
+
+                      <i className="fa-solid fa-pencil" style={{fontSize: 80}}></i>
+                    </div>
+                  </>
+                )}
                 <button
                   className="btn btn-secondary mt-2 w-50"
                   onClick={handleOpen}
@@ -227,59 +274,59 @@ function Profile() {
                       Si el usuario es vendedor puede editar otros datos */}
                   <Modal open={open} onClose={handleClose}>
                     <Box>
-                      <div class="todo">
-                        <div class="signupFrm">
+                      <div className="todo">
+                        <div className="signupFrm">
                           {UserData.estatus != 2 ? (
-                            <form action="" class="form" onSubmit={guardarData}>
+                            <form action="" className="form" onSubmit={guardarData}>
                               <h2 className="text-secondary">Editar perfil</h2>
-                              <div class="inputContainer">
+                              <div className="inputContainer">
                                 <input
                                   type="text"
-                                  class="input text-black"
+                                  className="input text-black"
                                   placeholder="a"
                                   name="nombre"
                                   onChange={capturarData}
                                 />
-                                <label for="" class="label">
+                                <label for="" className="label">
                                   Nombre
                                 </label>
                               </div>
 
-                              <div class="inputContainer">
+                              <div className="inputContainer">
                                 <input
                                   type="text"
-                                  class="input"
+                                  className="input"
                                   placeholder="a"
                                   name="apellido"
                                   onChange={capturarData}
                                 />
-                                <label for="" class="label">
+                                <label for="" className="label">
                                   Apellido
                                 </label>
                               </div>
 
-                              <div class="inputContainer">
+                              <div className="inputContainer">
                                 <input
                                   type="text"
-                                  class="input"
+                                  className="input"
                                   placeholder="a"
                                   name="foto"
                                   onChange={capturarData}
                                 />
-                                <label for="" class="label">
+                                <label for="" className="label">
                                   Foto
                                 </label>
                               </div>
 
-                              <div class="inputContainer">
+                              <div className="inputContainer">
                                 <input
                                   type="text"
-                                  class="input"
+                                  className="input"
                                   placeholder="a"
                                   name="telefono"
                                   onChange={capturarData}
                                 />
-                                <label for="" class="label">
+                                <label for="" className="label">
                                   Telefono
                                 </label>
                               </div>
@@ -297,87 +344,87 @@ function Profile() {
                               </button>
                             </form>
                           ) : (
-                            <form action="" class="form" onSubmit={guardarData}>
+                            <form action="" className="form" onSubmit={guardarData}>
                               <h2 className="text-secondary">Editar perfil</h2>
-                              <div class="inputContainer">
+                              <div className="inputContainer">
                                 <input
                                   type="text"
-                                  class="input text-black"
+                                  className="input text-black"
                                   placeholder="a"
                                   name="nombre"
                                   onChange={capturarData}
                                 />
-                                <label for="" class="label">
+                                <label for="" className="label">
                                   Nombre
                                 </label>
                               </div>
 
-                              <div class="inputContainer">
+                              <div className="inputContainer">
                                 <input
                                   type="text"
-                                  class="input"
+                                  className="input"
                                   placeholder="a"
                                   name="apellido"
                                   onChange={capturarData}
                                 />
-                                <label for="" class="label">
+                                <label for="" className="label">
                                   Apellido
                                 </label>
                               </div>
 
-                              <div class="inputContainer">
+                              <div className="inputContainer">
                                 <input
                                   type="text"
-                                  class="input"
+                                  className="input"
                                   placeholder="a"
                                   name="foto"
                                   onChange={capturarData}
                                 />
-                                <label for="" class="label">
+                                <label for="" className="label">
                                   Foto
                                 </label>
                               </div>
 
-                              <div class="inputContainer">
+                              <div className="inputContainer">
                                 <input
                                   type="text"
-                                  class="input"
+                                  className="input"
                                   placeholder="a"
                                   name="telefono"
                                   onChange={capturarData}
                                 />
-                                <label for="" class="label">
+                                <label for="" className="label">
                                   Telefono
                                 </label>
                               </div>
 
-                              <div class="inputContainer">
+                              <div className="inputContainer">
                                 <input
                                   type="text"
-                                  class="input"
+                                  className="input"
                                   placeholder="a"
                                   name="direccion"
                                   onChange={capturarData}
                                 />
-                                <label for="" class="label">
+                                <label for="" className="label">
                                   Direccion
                                 </label>
                               </div>
 
-                              <div class="inputContainer">
+                              <div className="inputContainer">
                                 <input
                                   type="text"
-                                  class="input"
+                                  className="input"
                                   placeholder="a"
                                   name="contacto"
                                   onChange={capturarData}
                                 />
-                                <label for="" class="label">
+                                <label for="" className="label">
                                   Contacto
                                 </label>
                               </div>
 
-                              {/* <input type="submit" class="submitBtn" value="Guardar" onClick={handleClose} /> */}
+                              {/* <input type="submit" className="submitBtn" value="Guardar" onClick={handleClose} /> */}
                               <button
                                 className="m-2 btn btn-primary"
                                 onClick={guardarData}
@@ -403,11 +450,11 @@ function Profile() {
                     onClose={handleCloseUpdateStatus}
                   >
                     <Box>
-                      <div class="todo">
-                        <div class="signupFrm">
+                      <div className="todo">
+                        <div className="signupFrm">
                           <form
                             action=""
-                            class="formUpdate"
+                            className="formUpdate"
                             onSubmit={guardarData}
                           >
                             <h2 className="text-secondary">
@@ -428,16 +475,16 @@ function Profile() {
                               perteneces así como el área en la que estudias,
                               especifícala a continuación:
                             </p>
-                            <div class="inputContainer">
+                            <div className="inputContainer">
                               <input
                                 type="text"
-                                class="input"
+                                className="input"
                                 placeholder="a"
                                 name="direccion"
                                 onChange={capturarData}
                                 required
                               />
-                              <label for="" class="label">
+                              <label for="" className="label">
                                 Direccion
                               </label>
                             </div>
@@ -447,19 +494,21 @@ function Profile() {
                             <p className="text-black">
                               En este apartado especifica cómo te gustaría que
                               te contacten para realizar el intercambio, esta
-                              información no será mostrada en tu perfil público.                              
+                              información no será mostrada en tu perfil público.
                             </p>
-                            <p className="text-secondary">Ej. Whatsapp: 555 555 5555, Correo: email@mail.com</p>
-                            <div class="inputContainer">
+                            <p className="text-secondary">
+                              Ej. Whatsapp: 555 555 5555, Correo: email@mail.com
+                            </p>
+                            <div className="inputContainer">
                               <input
                                 type="text"
-                                class="input"
+                                className="input"
                                 placeholder="a"
                                 name="contacto"
                                 onChange={capturarData}
                                 required
                               />
-                              <label for="" class="label">
+                              <label for="" className="label">
                                 Contacto
                               </label>
                             </div>
@@ -498,7 +547,7 @@ function Profile() {
                           key={list._id}
                         >
                           <div className="product-img-container my-2 d-flex flex-wrap justify-content-center align-items-center">
-                            <img src={DefaultUserIcon} alt="imagen producto" />
+                            <img src={list.foto} alt="imagen producto" />
                           </div>
                           <h4 className="product-bx-h d-flex flex-wrap justify-content-center align-items-center">
                             {list.titulo}
@@ -521,12 +570,14 @@ function Profile() {
                           >
                             Eliminar
                           </button>
-                          <Link
-                            to={`/ProductEdit/${list._id}`}
+                          <button
                             className="btn-primary"
+                            onClick={() => {
+                              navigate(`/ProductEdit/${list._id}`);
+                            }}
                           >
                             Editar
-                          </Link>
+                          </button>
                         </div>
                       ))}
                     </div>

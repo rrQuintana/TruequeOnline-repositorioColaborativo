@@ -60,6 +60,14 @@ function Login() {
       reportes: usuario.reportes,
       estatus: usuario.estatus,
     };
+    const numero = document.getElementById("password")
+    const esNumero = /^\d+$/.test(numero);
+    if (!esNumero) {
+      alert("Por favor ingrese de teléfono número válido");
+      numero.value = ""; // Limpiamos el input en caso de que se haya ingresado un valor no numérico
+    } else {
+      alert("Número válido");
+    }
     if (strength >= 4) {
       //Crear función post de los datos
       await axios.post("http://localhost:4000/api/usuarios", newUser);
@@ -287,7 +295,7 @@ function Login() {
                       <h5 className="text-secondary mt-4">Contraseña*</h5>
                       <p className="text-secondary">
                         Debe ser mayor a 6 caracteres, incluir caracteres
-                        peciales, números y mayúsculas.
+                        especiales, números y mayúsculas.
                       </p>
                       <Form.Control
                         id="usuario-password"

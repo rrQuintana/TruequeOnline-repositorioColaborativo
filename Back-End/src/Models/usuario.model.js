@@ -9,7 +9,7 @@ const usuarioSchema = new Schema({
     contacto: String,
     foto: String,
     calificacion: String,
-    reportes: Number,
+    reportes: Number, //reportes = reportes + 1
     estatus: Number, // 0: Admin, 1: Activo, 2: Vendedor 3: Inactivo
 },
 {

@@ -88,7 +88,7 @@ function ProductPage() {
         id="about"
       >
         <div className="container">
-          <div className="row align-items-center flex-row-reverse">
+          <div className="row align-items-center flex-row-reverse mt-5">
             <div className="col-lg-6">
               <div className="about-text go-to">
                 <h3 className="dark-color">{publicacion.titulo}</h3>
@@ -117,9 +117,10 @@ function ProductPage() {
               </div>
               <div className="about-avatar ms-5">
                 <img
-                  src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                  src={publicacion.foto}
                   title=""
                   alt=""
+                  style={{ width: 400, height: 400 }}
                 />
               </div>
             </div>

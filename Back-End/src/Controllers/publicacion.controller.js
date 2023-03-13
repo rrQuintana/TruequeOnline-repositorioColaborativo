@@ -11,10 +11,11 @@ publicacionCtrl.getPost = async (req, res) => {
 };
 
 publicacionCtrl.createPost = async (req, res) => {
-    const { titulo, contenido, categoria, precio, reportes, autor } = req.body;
+    const { titulo, contenido, foto, categoria, precio, reportes, autor } = req.body;
     const newPost = new Publicacion({
         titulo: titulo,
         contenido: contenido,
+        foto: foto,
         categoria: categoria,
         precio: precio,
         reportes: reportes,
@@ -35,10 +36,11 @@ publicacionCtrl.deletePost = async (req, res) => {
 };
 
 publicacionCtrl.updatePost = async (req, res) => {
-    const { titulo, contenido, categoria, precio } = req.body;
+    const { titulo, contenido, foto, categoria, precio } = req.body;
     await Publicacion.findByIdAndUpdate(req.params.id, {
         titulo: titulo,
         contenido: contenido,
+        foto: foto,
         categoria: categoria,
         precio: precio,
     });
@@ -62,6 +64,20 @@ publicacionCtrl.getComentariosPublicacion = (req, res) => {
       }
       res.status(200).json(comentarios);
     });
+};
+
+publicacionCtrl.getUsuariosComentariosPublicacion = async (req, res) => {
+  try {
+    const comentarios = await Comentario.find({ publicacion: req.params.id });
+    const usuarios = {};
+    comentarios.forEach(comentario => {
+      usuarios[comentario.usuario] = true;
+    });
+    res.status(200).json(Object.keys(usuarios));
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ mensaje: 'Hubo un error al obtener los usuarios que comentaron la publicación.' });
+  }
 };
 
 module.exports = publicacionCtrl;
