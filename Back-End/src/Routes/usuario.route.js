@@ -23,7 +23,7 @@ router.route('/:email')
   .get(getUsuario)
   .delete(deleteUser)
 
-router.route('/:id')
+  router.route('/:id')
   .put(updateUser);
 
 router.route('/comentarios/:id')

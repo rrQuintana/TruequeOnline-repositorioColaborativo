@@ -44,39 +44,43 @@ function Login() {
     setUsuario({ ...usuario, [name]: value });
   };
 
-  //Funcion para guardar los datos del usuario en mongo
-  const guardarData = async (e) => {
-    e.preventDefault();
-    //Meter datos ingresados en
-    const newUser = {
-      nombre: usuario.nombre,
-      apellido: usuario.apellido,
-      telefono: usuario.telefono,
-      email: usuario.email,
-      direccion: usuario.direccion,
-      contacto: usuario.contacto,
-      foto: usuario.foto,
-      calificacion: usuario.calificacion,
-      reportes: usuario.reportes,
-      estatus: usuario.estatus,
-    };
-    const numero = document.getElementById("usuario-telefono")
-    const esNumero = /^\d+$/.test(numero);
-    if (esNumero) {
-      alert("Por favor ingrese de teléfono número válido");
-      numero.value=""; // Limpiamos el input en caso de que se haya ingresado un valor no numérico
-    }else{
-      console.log("Datos validados")
-    }
+ //Función para guardar los datos del usuario en mongo
+const guardarData = async (e) => {
+  e.preventDefault();
+  //Obtener datos ingresados por el usuario
+  const newUser = {
+    nombre: usuario.nombre,
+    apellido: usuario.apellido,
+    telefono: usuario.telefono,
+    email: usuario.email,
+    direccion: usuario.direccion,
+    contacto: usuario.contacto,
+    foto: usuario.foto,
+    calificacion: usuario.calificacion,
+    reportes: usuario.reportes,
+    estatus: usuario.estatus,
+  };
+  //Validar que el teléfono sea un número
+  const esNumero = /^\d+$/.test(usuario.telefono);
+  if (!esNumero) {
+    alert("Por favor ingrese un número de teléfono válido");
+  } else {
     if (strength >= 4) {
-      //Crear función post de los datos
-      await axios.post("http://localhost:4000/api/usuarios", newUser);
-      setUsuario({ ...Usuario });
-      Registrar();
+      try {
+        //Enviar una solicitud POST para guardar los datos en la base de datos
+        await axios.post("http://localhost:4000/api/usuarios", newUser)
+        setUsuario({ ...Usuario }); //Actualizar el estado del usuario
+        alert("Usuario registrado con éxito");
+        Registrar();
+      } catch (error) {
+        console.log(error);
+        alert("Error al registrar usuario");
+      }
     } else {
       window.alert("La contraseña no es segura");
     }
-  };
+  }
+};
 
   //Crear un usuario
   function Registrar() {
@@ -98,11 +102,11 @@ function Login() {
       .catch((error) => {
         const errorMessage = error.message;
         errorMessage ===
-        "Firebase: Password should be at least 6 characters (auth/weak-password)."
+          "Firebase: Password should be at least 6 characters (auth/weak-password)."
           ? setErrMessage("La contraseña tiene que ser mayor a 6 caracteres")
           : errorMessage === "Firebase: Error (auth/email-already-in-use)."
-          ? setErrMessage("Correo en uso")
-          : setErrMessage("Datos mal ingresados");
+            ? setErrMessage("Correo en uso")
+            : setErrMessage("Datos mal ingresados");
       });
   }
 
