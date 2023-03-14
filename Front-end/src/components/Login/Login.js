@@ -44,43 +44,44 @@ function Login() {
     setUsuario({ ...usuario, [name]: value });
   };
 
- //Función para guardar los datos del usuario en mongo
-const guardarData = async (e) => {
-  e.preventDefault();
-  //Obtener datos ingresados por el usuario
-  const newUser = {
-    nombre: usuario.nombre,
-    apellido: usuario.apellido,
-    telefono: usuario.telefono,
-    email: usuario.email,
-    direccion: usuario.direccion,
-    contacto: usuario.contacto,
-    foto: usuario.foto,
-    calificacion: usuario.calificacion,
-    reportes: usuario.reportes,
-    estatus: usuario.estatus,
-  };
-  //Validar que el teléfono sea un número
-  const esNumero = /^\d+$/.test(usuario.telefono);
-  if (!esNumero) {
-    alert("Por favor ingrese un número de teléfono válido");
-  } else {
-    if (strength >= 4) {
-      try {
-        //Enviar una solicitud POST para guardar los datos en la base de datos
-        await axios.post("http://localhost:4000/api/usuarios", newUser)
-        setUsuario({ ...Usuario }); //Actualizar el estado del usuario
-        alert("Usuario registrado con éxito");
-        Registrar();
-      } catch (error) {
-        console.log(error);
-        alert("Error al registrar usuario");
+  //Función para guardar los datos del usuario en mongo
+  const guardarData = async (e) => {
+    e.preventDefault();
+    //Obtener datos ingresados por el usuario
+    const newUser = {
+      nombre: usuario.nombre,
+      apellido: usuario.apellido,
+      telefono: usuario.telefono,
+      email: usuario.email,
+      direccion: usuario.direccion,
+      contacto: usuario.contacto,
+      foto: usuario.foto,
+      calificacion: usuario.calificacion,
+      reportes: usuario.reportes,
+      estatus: usuario.estatus,
+    };
+    //Validar que el teléfono sea un número
+    const esNumero = /^\d+$/.test(usuario.telefono);
+    if (esNumero && usuario.telefono.length == 10) {
+      if (strength >= 4) {
+        try {
+          //Enviar una solicitud POST para guardar los datos en la base de datos
+          await axios.post("http://localhost:4000/api/usuarios", newUser)
+          setUsuario({ ...Usuario }); //Actualizar el estado del usuario
+          alert("Usuario registrado con éxito");
+          Registrar();
+        } catch (error) {
+          console.log(error);
+          alert("Error al registrar usuario");
+        }
+      } else {
+        window.alert("La contraseña no es segura");
       }
     } else {
-      window.alert("La contraseña no es segura");
+      alert("Por favor ingrese un número de teléfono válido de 10 dígitos");
+
     }
-  }
-};
+  };
 
   //Crear un usuario
   function Registrar() {
@@ -280,6 +281,7 @@ const guardarData = async (e) => {
                         type="text"
                         placeholder="Enter phone"
                         onChange={capturarData}
+                        maxLength="10"
                       />
                     </Form.Group>
 
