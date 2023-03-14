@@ -12,6 +12,8 @@ function ProductList() {
       if (!buscando) {
         const res = await axios.get("http://localhost:4000/api/publicaciones");
         setLista(res.data);
+        console.log("-")
+        setBuscando(true)
       }
     };
     getPubliaciones();

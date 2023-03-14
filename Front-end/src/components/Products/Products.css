@@ -45,6 +45,7 @@
   .navBusqueda{
     position: sticky !important;
     top: 40px;
+    z-index: 99999999;
   }
   .buscarCategoria{
     height: 32px;
